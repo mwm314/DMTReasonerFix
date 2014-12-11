@@ -14,7 +14,7 @@ import uk.ac.manchester.cs.owl.owlapi.*;
 
 /**
  * Unit tests for testing the DAG structure
- * 
+ * .
  * @author Matt
  *
  */
