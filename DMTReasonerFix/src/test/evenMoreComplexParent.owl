@@ -1,0 +1,260 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+]>
+
+
+<rdf:RDF xmlns="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#"
+     xml:base="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasChild -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasChild">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Parent"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Person"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasDescendent"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasDescendent -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasDescendent">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Person"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Person"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasGrandchild -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasGrandchild">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Grandparent"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Person"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasDescendent"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasGrandparent -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasGrandparent">
+        <rdfs:range rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Grandparent"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Person"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasParent -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasParent">
+        <rdfs:range rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Parent"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Person"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasAge -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasAge">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Person"/>
+        <rdfs:range rdf:resource="&xsd;int"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasFemaleName -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasFemaleName">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasName"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasMaleName -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasMaleName">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasName"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasName -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasName">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Person"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasNickname -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasNickname">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasName"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#SomeMaleOffspring -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#SomeMaleOffspring">
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasDescendent"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Male"/>
+            </owl:Restriction>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Father -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Father">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Male"/>
+                    <rdf:Description rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Parent"/>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Female -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Female">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Person"/>
+        <owl:disjointWith rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Male"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Grandfather -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Grandfather">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Grandparent"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Male"/>
+        <owl:disjointWith rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Grandmother"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Grandmother -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Grandmother">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Female"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Grandparent"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Grandparent -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Grandparent">
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasChild"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Parent"/>
+            </owl:Restriction>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Male -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Male">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Mother -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Mother">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Female"/>
+                    <rdf:Description rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Parent"/>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Parent -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Parent">
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasChild"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Person"/>
+            </owl:Restriction>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Person -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Person"/>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
+
