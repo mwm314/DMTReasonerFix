@@ -542,15 +542,12 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
             if (direct) {
 
                 Node<OWLClass> currentClassNode = iter.next();
-                System.out.println("CURR CLASS NODE: " + currentClassNode);
 
                 if (currentClassNode.contains(owlclass)) {
-                    System.out.println("FOUND FATHER: " + currentClassNode);
                     Set<DefaultEdge> incomingEdges = testGraph.incomingEdgesOf(currentClassNode);
 
                     for (DefaultEdge e : incomingEdges) {
                         Node<OWLClass> classNode = testGraph.getEdgeSource(e);
-                        System.out.println("Class node: " + classNode);
                         instances.addNode(classNode);
                     }
                 }

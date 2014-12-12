@@ -40,8 +40,22 @@ public class TestDMTReasoner {
 	 * I'm not fancy/determined enough to link it to the github repo...
 	 */
 	private String localDirectoryForOntologies = "C:/Users/Matt/Desktop/FinalOntology/";
+	
+	//@Test
+	/**
+	 * Test whether our DAG is being built correctly in the simple case
+	 */
+	public void testGetBottomAndGetTopClassNode() throws Exception {
+		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File(localDirectoryForOntologies + "simpleParent.owl"));
+		OWLReasoner reasoner = new DMTReasonerFactory().createReasoner(ont3);
+		
+		System.out.println("Bottom: " + reasoner.getBottomClassNode());
+		System.out.println("Top: " + reasoner.getTopClassNode());
+		
+		assertEquals(1,0);
+	}
 
-	@Test
+	//@Test
 	/**
 	 * Subsumption test
 	 * Test to show that father subsumes grandfather in the evenMoreComplexParent.owl ontology
@@ -80,12 +94,14 @@ public class TestDMTReasoner {
 		}
 
 		NodeSet<OWLClass> directSubclasses = reasoner.getSubClasses(father, true);
-		System.out.println("Node set:" + directSubclasses);
+		//System.out.println("Node set:" + directSubclasses);
+		
+		System.out.println("Top: " + reasoner.getTopClassNode());
+		System.out.println("Bottom: " + reasoner.getBottomClassNode());
 
 		//See if grandfather is the one and only class
 		if (directSubclasses.isSingleton()) {
 			for (Node<OWLClass> n : directSubclasses) {
-				System.out.println("Node entities: " + n.getEntities());
 				if (n.contains(grandfather)) {
 					assertEquals(0, 0);
 					return;
@@ -98,7 +114,7 @@ public class TestDMTReasoner {
 
 	}
 	
-	@Test
+	//@Test
 	/**
 	 * Here we test whether A ^ -A is unsatisfiable
 	 */
@@ -117,7 +133,7 @@ public class TestDMTReasoner {
 		assertFalse("A ^ -A is unsatisfiale", reasoner.isSatisfiable(new OWLObjectIntersectionOfImpl(aIntersectNota)));
 	}
 	
-	@Test
+	//@Test
 	/**
 	 * Here we test whether A union -A is satisfiable
 	 */
@@ -167,6 +183,9 @@ public class TestDMTReasoner {
 				person = new OWLClassImpl(c.getIRI());
 			}
 		}
+		
+		System.out.println(topNode);
+		System.out.println(reasoner.getBottomClassNode());
 		
 		//Check it is in the right spot in the DAG
 		assertTrue(topNode.contains(person));
