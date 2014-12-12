@@ -57,7 +57,7 @@ public class TestOntologyRead {
 		OWLOntology ont = ontManager.loadOntologyFromOntologyDocument(new File("C:\\Users\\Keechwa\\Documents\\GitHub\\DMTReasoner\\DTMreasoner\\src\\test\\testOntology.owl"));
 		// OWLOntology ont2 = ontManager.loadOntologyFromOntologyDocument(new
 		// File("C:\\Users\\Keechwa\\Documents\\GitHub\\DMTReasoner\\DTMreasoner\\src\\test\\simpleParent.owl"));
-		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File("C:\\Users\\Keechwa\\Documents\\GitHub\\DMTReasoner\\DTMreasoner\\src\\test\\evenMoreComplexParent.owl"));
+		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File("C:\\Users\\Keechwa\\Documents\\GitHub\\DMTReasonerFix\\DMTreasonerFix\\src\\test\\moreComplexParentWithEquivalentClasses.owl"));
 		Set<OWLAxiom> axioms = ont3.getAxioms();
 		
 		Iterator<OWLAxiom> iter = axioms.iterator();
@@ -77,7 +77,7 @@ public class TestOntologyRead {
 		OWLReasoner reasoner = new DMTReasonerFactory().createReasoner(ont3);
 		HashSet<OWLClassExpression> union = new HashSet<>();
 		union.add(classes.toArray(new OWLClass[0])[0]);
-		union.add(classes.toArray(new OWLClass[0])[0].getComplementNNF());
+		union.add(classes.toArray(new OWLClass[0])[1].getComplementNNF());
 		System.out.println(reasoner.isSatisfiable(new OWLObjectUnionOfImpl(union)));
 		System.out.println(union);
 		// test();
