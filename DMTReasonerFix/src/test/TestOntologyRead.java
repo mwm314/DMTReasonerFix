@@ -31,6 +31,7 @@ import uk.ac.manchester.cs.owl.owlapi.OWLNamedIndividualImpl;
 import uk.ac.manchester.cs.owl.owlapi.OWLObjectIntersectionOfImpl;
 import uk.ac.manchester.cs.owl.owlapi.OWLObjectPropertyImpl;
 import uk.ac.manchester.cs.owl.owlapi.OWLObjectSomeValuesFromImpl;
+import uk.ac.manchester.cs.owl.owlapi.OWLObjectUnionOfImpl;
 
 //import com.github.jsonldjava.core.RDFDataset.IRI;
 /**
@@ -76,8 +77,8 @@ public class TestOntologyRead {
 		OWLReasoner reasoner = new DMTReasonerFactory().createReasoner(ont3);
 		HashSet<OWLClassExpression> union = new HashSet<>();
 		union.add(classes.toArray(new OWLClass[0])[0]);
-		union.add(classes.toArray(new OWLClass[0])[8].getComplementNNF());
-		System.out.println(reasoner.isSatisfiable(new OWLObjectIntersectionOfImpl(union)));
+		union.add(classes.toArray(new OWLClass[0])[0].getComplementNNF());
+		System.out.println(reasoner.isSatisfiable(new OWLObjectUnionOfImpl(union)));
 		System.out.println(union);
 		// test();
 		// test2();
