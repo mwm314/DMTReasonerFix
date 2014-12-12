@@ -875,16 +875,35 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
         HashSet<OWLSubClassOfAxiom> desc = new HashSet<>();
         desc.add(f);
         ArrayList<Set<OWLSubClassOfAxiom>> results = extend(c, desc);
+        ArrayList<Set<OWLSubClassOfAxiom>> removals = new ArrayList<>();
         boolean sat = false;
         for (Set<OWLSubClassOfAxiom> g : results) {
             boolean test = true;
             if (!isDescSatisfiable(g)) {
                 test = false;
+                removals.add(g);
             }
             sat = sat || test;
         }
+        results.removeAll(removals);
+        if (results.isEmpty()) {
+            HashSet<OWLSubClassOfAxiom> k = new HashSet<>();
+            k.add(new OWLSubClassOfAxiomImpl(c, OWLClassNode.getBottomNode().getRepresentativeElement(), new HashSet<OWLAnnotation>()));
+            results.add(k);
+        } else if (isNecessary(results)) {
+            HashSet<OWLSubClassOfAxiom> k = new HashSet<>();
+            k.add(new OWLSubClassOfAxiomImpl(c, OWLClassNode.getTopNode().getRepresentativeElement(), new HashSet<OWLAnnotation>()));
+            results.clear();
+            results.add(k);
+        }
+        Set<OWLClassExpression> subclasses = new HashSet<>();
+        for (Set<OWLSubClassOfAxiom> s : results) {
+            for (OWLSubClassOfAxiom a : s) {
+                subclasses.add(a.getSuperClass());
+            }
+        }
         System.out.println("CLASS: " + c);
-        System.out.println("SUBCLASSES: " + results);
+        System.out.println("SUBCLASSES: " + subclasses);
 
         return sat;
     }
@@ -1099,6 +1118,11 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
                 HashSet<OWLSubClassOfAxiom> k = new HashSet<>();
                 k.add(new OWLSubClassOfAxiomImpl(classArray.get(i), OWLClassNode.getBottomNode().getRepresentativeElement(), new HashSet<OWLAnnotation>()));
                 results.add(k);
+            } else if (isNecessary(results)) {
+                HashSet<OWLSubClassOfAxiom> k = new HashSet<>();
+                k.add(new OWLSubClassOfAxiomImpl(classArray.get(i), OWLClassNode.getTopNode().getRepresentativeElement(), new HashSet<OWLAnnotation>()));
+                results.clear();
+                results.add(k);
             }
             classDescriptions.set(i, results);
         }
@@ -1197,7 +1221,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
         if (!subsumptions.isEmpty()) {
             for (int i = 0; i < subsumptions.size(); i++) {
                 if (vertex == null) {
-                    if (subsumptions.get(i).isEmpty()) {
+                    if (subsumptions.get(i).isEmpty() || (subsumptions.get(i).size() == 1 && subsumptions.get(i).get(0).getIRI().equals(OWLClassNode.getTopNode().getRepresentativeElement().getIRI()))) {
                         OWLClassNode v = new OWLClassNode(classes.get(i));
                         hierarchy.addVertex(v);
                         try {
@@ -1309,7 +1333,11 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
                         } else if (d instanceof OWLObjectUnionOf) {
                             subs.add(a);
                             for (OWLClassExpression e : d.asDisjunctSet()) {
-                                interpretations.addAll(recurseExtend(extendClass, extendClassDescriptions, new OWLSubClassOfAxiomImpl(extendClass, e, new HashSet<OWLAnnotation>()), subs));
+                                HashSet<OWLSubClassOfAxiom> hs = new HashSet<>();
+                                for (Set<OWLSubClassOfAxiom> sets : recurseExtend(extendClass, extendClassDescriptions, new OWLSubClassOfAxiomImpl(extendClass, e, new HashSet<OWLAnnotation>()), subs)) {
+                                    hs.addAll(sets);
+                                }
+                                interpretations.add(hs);
                             }
                             return interpretations; //Existential Q
                         } else if (d instanceof OWLObjectSomeValuesFrom) {
@@ -1323,7 +1351,11 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
                                 } else if (r.getFiller() instanceof OWLObjectUnionOf) {
                                     subs.add(a);
                                     for (OWLClassExpression e : r.getFiller().asDisjunctSet()) {
-                                        interpretations.addAll(recurseExtend(extendClass, extendClassDescriptions, new OWLSubClassOfAxiomImpl(extendClass, new OWLObjectSomeValuesFromImpl(r.getProperty(), e), new HashSet<OWLAnnotation>()), subs));
+                                        HashSet<OWLSubClassOfAxiom> hs = new HashSet<>();
+                                        for (Set<OWLSubClassOfAxiom> sets : recurseExtend(extendClass, extendClassDescriptions, new OWLSubClassOfAxiomImpl(extendClass, new OWLObjectSomeValuesFromImpl(r.getProperty(), e), new HashSet<OWLAnnotation>()), subs)) {
+                                            hs.addAll(sets);
+                                        }
+                                        interpretations.add(hs);
                                     }
                                     return interpretations;
                                 }
@@ -1346,7 +1378,11 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
                                 } else if (r.getFiller() instanceof OWLObjectUnionOf) {
                                     subs.add(a);
                                     for (OWLClassExpression e : r.getFiller().asDisjunctSet()) {
-                                        interpretations.addAll(recurseExtend(extendClass, extendClassDescriptions, new OWLSubClassOfAxiomImpl(extendClass, new OWLObjectAllValuesFromImpl(r.getProperty(), e), new HashSet<OWLAnnotation>()), subs));
+                                        HashSet<OWLSubClassOfAxiom> hs = new HashSet<>();
+                                        for (Set<OWLSubClassOfAxiom> sets : recurseExtend(extendClass, extendClassDescriptions, new OWLSubClassOfAxiomImpl(extendClass, new OWLObjectAllValuesFromImpl(r.getProperty(), e), new HashSet<OWLAnnotation>()), subs)) {
+                                            hs.addAll(sets);
+                                        }
+                                        interpretations.add(hs);
                                     }
                                     return interpretations;
                                 }
@@ -1379,9 +1415,17 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
                                     subs.add(a);
                                     for (OWLClassExpression e : r.getFiller().asDisjunctSet()) {
                                         if (r instanceof OWLObjectMaxCardinality) {
-                                            interpretations.addAll(recurseExtend(extendClass, extendClassDescriptions, new OWLSubClassOfAxiomImpl(extendClass, new OWLObjectMaxCardinalityImpl(r.getProperty(), r.getCardinality(), e), new HashSet<OWLAnnotation>()), subs));
+                                            HashSet<OWLSubClassOfAxiom> hs = new HashSet<>();
+                                            for (Set<OWLSubClassOfAxiom> sets : recurseExtend(extendClass, extendClassDescriptions, new OWLSubClassOfAxiomImpl(extendClass, new OWLObjectMaxCardinalityImpl(r.getProperty(), r.getCardinality(), e), new HashSet<OWLAnnotation>()), subs)) {
+                                                hs.addAll(sets);
+                                            }
+                                            interpretations.add(hs);
                                         } else {
-                                            interpretations.addAll(recurseExtend(extendClass, extendClassDescriptions, new OWLSubClassOfAxiomImpl(extendClass, new OWLObjectMinCardinalityImpl(r.getProperty(), r.getCardinality(), e), new HashSet<OWLAnnotation>()), subs));
+                                            HashSet<OWLSubClassOfAxiom> hs = new HashSet<>();
+                                            for (Set<OWLSubClassOfAxiom> sets : recurseExtend(extendClass, extendClassDescriptions, new OWLSubClassOfAxiomImpl(extendClass, new OWLObjectMinCardinalityImpl(r.getProperty(), r.getCardinality(), e), new HashSet<OWLAnnotation>()), subs)) {
+                                                hs.addAll(sets);
+                                            }
+                                            interpretations.add(hs);
                                         }
                                     }
                                     return interpretations;
@@ -1459,6 +1503,28 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
                 }
             }
 
+        }
+        return false;
+    }
+
+    private boolean isNecessary(ArrayList<Set<OWLSubClassOfAxiom>> results) {
+        for (int i = 0; i < results.size(); i++) {
+            for (int j = i + 1; j < results.size(); j++) {
+                //Begin single pair comparison
+                boolean matching = true;
+                for (OWLSubClassOfAxiom e : results.get(i)) {
+                    Set<OWLClassExpression> k = new HashSet<>();
+                    for (OWLSubClassOfAxiom l : results.get(j)) {
+                        k.add(l.getSuperClass());
+                    }
+                    if (!matches(k, e.getSuperClass().getComplementNNF())) {
+                        matching = false;
+                    }
+                }
+                if (matching) {
+                    return true;
+                }
+            }
         }
         return false;
     }
