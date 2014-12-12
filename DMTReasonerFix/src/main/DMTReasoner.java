@@ -71,12 +71,12 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
      */
     private OWLOntology ontology;
 
-	// DAGS for our class and property hierarchies. See here for why we need
+    // DAGS for our class and property hierarchies. See here for why we need
     // them:
     // http://owlapi.sourceforge.net/javadoc/org/semanticweb/owlapi/reasoner/OWLReasoner.html
     private DirectedAcyclicGraph<Node<OWLClass>, DefaultEdge> classNodeHierarchy = new DirectedAcyclicGraph<>(DefaultEdge.class);
     private DirectedAcyclicGraph<Node<OWLDataProperty>, DefaultEdge> dataPropertyNodeHierarchy = new DirectedAcyclicGraph<>(DefaultEdge.class);
-	// I'm not sure why, but it seems as if this interface is conducive
+    // I'm not sure why, but it seems as if this interface is conducive
     // Node<OWLObjectPropertyExpression>, but I feel like they should be
     // Node<OWLObjectProperty>.
     private DirectedAcyclicGraph<Node<OWLObjectPropertyExpression>, DefaultEdge> objectPropertyNodeHierarchy = new DirectedAcyclicGraph<>(DefaultEdge.class);
@@ -166,7 +166,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
             Node<OWLClass> currentNode = iter.next();
             Set<DefaultEdge> edgeSet = classNodeHierarchy.incomingEdgesOf(currentNode);
             if (edgeSet.isEmpty()) {
-				// The bottom node should not have any incoming edges, so return
+                // The bottom node should not have any incoming edges, so return
                 // this node
                 return currentNode;
             }
@@ -188,7 +188,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
             Set<DefaultEdge> edgeSet = dataPropertyNodeHierarchy.incomingEdgesOf(currentNode);
 
             if (edgeSet.isEmpty()) {
-				// The bottom node should not have any incoming edges, so return
+                // The bottom node should not have any incoming edges, so return
                 // this node
                 return currentNode;
             }
@@ -213,7 +213,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
             Set<DefaultEdge> edgeSet = objectPropertyNodeHierarchy.incomingEdgesOf(currentNode);
 
             if (edgeSet.isEmpty()) {
-				// The bottom node should not have any incoming edges, so return
+                // The bottom node should not have any incoming edges, so return
                 // this node
                 return currentNode;
             }
@@ -608,7 +608,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
                 }
             }
         }
-		// This means the specified data property was not in our data property
+        // This means the specified data property was not in our data property
         // hierarchy
         return null;
     }
@@ -676,7 +676,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
                 }
             }
         }
-		// This means the specified data property was not in our data property
+        // This means the specified data property was not in our data property
         // hierarchy
         return null;
     }
@@ -754,7 +754,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
             Set<DefaultEdge> edgeSet = classNodeHierarchy.outgoingEdgesOf(currentNode);
 
             if (edgeSet.isEmpty()) {
-				// The bottom node should not have any outgoing edges, so return
+                // The bottom node should not have any outgoing edges, so return
                 // this node
                 return currentNode;
             }
@@ -779,7 +779,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
             Set<DefaultEdge> edgeSet = dataPropertyNodeHierarchy.outgoingEdgesOf(currentNode);
 
             if (edgeSet.isEmpty()) {
-				// The bottom node should not have any outgoing edges, so return
+                // The bottom node should not have any outgoing edges, so return
                 // this node
                 return currentNode;
             }
@@ -804,7 +804,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
             Set<DefaultEdge> edgeSet = objectPropertyNodeHierarchy.outgoingEdgesOf(currentNode);
 
             if (edgeSet.isEmpty()) {
-				// The bottom node should not have any outgoing edges, so return
+                // The bottom node should not have any outgoing edges, so return
                 // this node
                 return currentNode;
             }
@@ -842,7 +842,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
      */
     @Override
     public boolean isConsistent() {
-		// If there is an edge between the top and bottom class nodes, then
+        // If there is an edge between the top and bottom class nodes, then
         // there are just two nodes
         if (classNodeHierarchy.containsEdge(getTopClassNode(), getBottomClassNode())) {
             if (getTopClassNode().isSingleton()) {
@@ -885,7 +885,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
      * So we are assuming no unions or negation of any kind. Just dealing with
      * Exists, ForAll, and Intersection.
      */
-	// TODO: Spinning my wheels pretty badly here. Sorry :/. Sleeping on it for
+    // TODO: Spinning my wheels pretty badly here. Sorry :/. Sleeping on it for
     // tonight.
     // Need to find satisfiability wrt our axioms
 	/*
@@ -1106,6 +1106,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
                 for (OWLSubClassOfAxiom b : a.asOWLSubClassOfAxioms()) {
                     if (b.getSubClass().equals(classArray.get(i))) {
                         classDescriptions.get(i).get(0).add(b);
+                        primitives.set(i, Boolean.FALSE);
                     }
                 }
             }
@@ -1119,8 +1120,8 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
                 for (OWLSubClassOfAxiom b : a.asOWLSubClassOfAxioms()) {
                     if (b.getSubClass().equals(classArray.get(i))) {
                         classDescriptions.get(i).get(0).add(b);
-                        if(b.getSuperClass() instanceof OWLClass){
-                            if(!primitives.get(classArray.indexOf(b.getSuperClass().asOWLClass()))){
+                        if (b.getSuperClass() instanceof OWLClass) {
+                            if (!primitives.get(classArray.indexOf(b.getSuperClass().asOWLClass()))) {
                                 primitives.set(classArray.indexOf(b.getSuperClass().asOWLClass()), Boolean.TRUE);
                             }
                         }
@@ -1213,17 +1214,23 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
                 if (i != j) {
                     // This is a pairwise class comparison
                     boolean subsumed = false;
-					// First class, description loop (needs to be false for all
+                    // First class, description loop (needs to be false for all
                     // values of this loop)
                     for (int k = 0; k < subclassLists.get(j).size(); k++) {
                         // Second class, description loop
                         for (int l = 0; l < subclassLists.get(i).size(); l++) {
                             boolean flag = true;
+                            if (i == 10) {
+                                System.out.println(subclassLists.get(j).get(k));
+                            }
                             for (OWLClassExpression a : subclassLists.get(j).get(k)) {
                                 if (!matches(subclassLists.get(i).get(l), a)) {
                                     flag = false;
                                     break;
                                 }
+                            }
+                            if (i == 10) {
+                                System.out.println(flag);
                             }
                             subsumed = flag || subsumed;
                         }
@@ -1334,6 +1341,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
                     }
                 }
             }
+        } else {
             for (Node<OWLClass> node : hierarchy.vertexSet()) {
                 if (hierarchy.inDegreeOf(node) == 0 && hierarchy.outDegreeOf(node) > 0 && !node.equals(OWLClassNode.getBottomNode())) {
                     try {
@@ -1528,6 +1536,14 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
     }
 
     private boolean matches(Set<OWLClassExpression> list, OWLClassExpression a) {
+        if (!a.isAnonymous()) {
+            String iri = a.asOWLClass().getIRI().toString();
+            if (iri.endsWith("*")) {
+                iri = iri.substring(0, iri.length() - 1);
+                OWLClass destar = new OWLClassImpl(IRI.create(iri));
+                a = destar;
+            }
+        }
         if (list.contains(a)) {
             return true;
         }
