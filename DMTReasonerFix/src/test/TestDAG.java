@@ -87,6 +87,7 @@ public class TestDAG {
 		test.getBottomObjectPropertyNode();
 		System.out.println("TEST- DONE");
 	}
+	
 	private DirectedAcyclicGraph<Node<OWLClass>, DefaultEdge> setClassDag() throws Exception{
 		
 		DirectedAcyclicGraph<Node<OWLClass>, DefaultEdge> dag = new DirectedAcyclicGraph<Node<OWLClass>, DefaultEdge>(DefaultEdge.class);
