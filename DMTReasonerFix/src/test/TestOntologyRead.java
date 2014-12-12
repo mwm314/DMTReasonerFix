@@ -4,9 +4,7 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-
 import main.*;
-
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.AxiomType;
 import org.semanticweb.owlapi.model.IRI;
@@ -24,7 +22,6 @@ import org.semanticweb.owlapi.model.OWLObjectSomeValuesFrom;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
-
 import uk.ac.manchester.cs.owl.owlapi.OWLClassImpl;
 import uk.ac.manchester.cs.owl.owlapi.OWLDataFactoryImpl;
 import uk.ac.manchester.cs.owl.owlapi.OWLDataPropertyImpl;
@@ -34,7 +31,6 @@ import uk.ac.manchester.cs.owl.owlapi.OWLNamedIndividualImpl;
 import uk.ac.manchester.cs.owl.owlapi.OWLObjectIntersectionOfImpl;
 import uk.ac.manchester.cs.owl.owlapi.OWLObjectPropertyImpl;
 import uk.ac.manchester.cs.owl.owlapi.OWLObjectSomeValuesFromImpl;
-import uk.ac.manchester.cs.owl.owlapi.OWLObjectUnionOfImpl;
 
 //import com.github.jsonldjava.core.RDFDataset.IRI;
 /**
@@ -57,12 +53,10 @@ public class TestOntologyRead {
 		 * File("path to ontology"));
 		 */
 		OWLOntologyManager ontManager = OWLManager.createOWLOntologyManager();
-		//OWLOntology ont = ontManager.loadOntologyFromOntologyDocument(new File("C:\\Users\\Keechwa\\Documents\\GitHub\\DMTReasoner\\DTMreasoner\\src\\test\\testOntology.owl"));
-		//C:\Users\Matt\Desktop\FinalOntology
+		OWLOntology ont = ontManager.loadOntologyFromOntologyDocument(new File("C:\\Users\\Keechwa\\Documents\\GitHub\\DMTReasoner\\DTMreasoner\\src\\test\\testOntology.owl"));
 		// OWLOntology ont2 = ontManager.loadOntologyFromOntologyDocument(new
 		// File("C:\\Users\\Keechwa\\Documents\\GitHub\\DMTReasoner\\DTMreasoner\\src\\test\\simpleParent.owl"));
 		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File("C:\\Users\\Keechwa\\Documents\\GitHub\\DMTReasoner\\DTMreasoner\\src\\test\\evenMoreComplexParent.owl"));
-		//OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File("C:/Users/Matt/Desktop/FinalOntology/evenMoreComplexParent.owl"));
 		Set<OWLAxiom> axioms = ont3.getAxioms();
 		
 		Iterator<OWLAxiom> iter = axioms.iterator();
@@ -82,7 +76,7 @@ public class TestOntologyRead {
 		OWLReasoner reasoner = new DMTReasonerFactory().createReasoner(ont3);
 		HashSet<OWLClassExpression> union = new HashSet<>();
 		union.add(classes.toArray(new OWLClass[0])[0]);
-		union.add(classes.toArray(new OWLClass[0])[0].getComplementNNF());
+		union.add(classes.toArray(new OWLClass[0])[8].getComplementNNF());
 		System.out.println(reasoner.isSatisfiable(new OWLObjectIntersectionOfImpl(union)));
 		System.out.println(union);
 		// test();
