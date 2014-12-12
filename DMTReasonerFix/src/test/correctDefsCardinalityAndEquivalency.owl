@@ -126,12 +126,26 @@
 
     <owl:Class rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#AllMaleOffspring">
         <owl:equivalentClass>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasDescendent"/>
-                <owl:allValuesFrom rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Male"/>
-            </owl:Restriction>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Person"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasDescendent"/>
+                        <owl:allValuesFrom rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Male"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
         </owl:equivalentClass>
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Dad -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Dad">
+        <owl:equivalentClass rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Father"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Male"/>
     </owl:Class>
     
 
@@ -147,6 +161,26 @@
                 </owl:intersectionOf>
             </owl:Class>
         </owl:equivalentClass>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#FatherOfOnlyChild -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#FatherOfOnlyChild">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Male"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasChild"/>
+                        <owl:onClass rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Person"/>
+                        <owl:minQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:minQualifiedCardinality>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Person"/>
     </owl:Class>
     
 
@@ -216,6 +250,26 @@
     
 
 
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#NoChildren -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#NoChildren">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Person"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasChild"/>
+                        <owl:onClass rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Person"/>
+                        <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">0</owl:maxQualifiedCardinality>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Person"/>
+    </owl:Class>
+    
+
+
     <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Parent -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Parent">
@@ -232,7 +286,36 @@
 
     <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Person -->
 
-    <owl:Class rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Person"/>
+    <owl:Class rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Person">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Female"/>
+                    <rdf:Description rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Male"/>
+                </owl:unionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#UnsatisfiableMother -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#UnsatisfiableMother">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Mother"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#hasChild"/>
+                        <owl:onClass rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Person"/>
+                        <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">0</owl:maxQualifiedCardinality>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-63#Person"/>
+    </owl:Class>
     
 
 
