@@ -1295,6 +1295,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
 
     private void buildClassDAG(DirectedAcyclicGraph<Node<OWLClass>, DefaultEdge> hierarchy, ArrayList<ArrayList<OWLClass>> subsumptions, ArrayList<OWLClass> classes) {
         hierarchy.addVertex(OWLClassNode.getTopNode());
+        hierarchy.addVertex(OWLClassNode.getBottomNode());
         ArrayList<Pair<OWLClass, ArrayList<OWLClass>>> subCopy = new ArrayList<>();
         for (int i = 0; i < subsumptions.size(); i++) {
             subCopy.add(new Pair<>(classes.get(i), (ArrayList<OWLClass>) subsumptions.get(i).clone()));
@@ -1308,8 +1309,8 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
             Node<OWLClass> vertex = containsClass(hierarchy, sub.getElement0());
             if (vertex == null) {
                 vertex = new OWLClassNode(sub.getElement0());
+                hierarchy.addVertex(vertex);
             }
-            hierarchy.addVertex(vertex);
             ArrayList<OWLClass> removals = new ArrayList<>();
             for (int i = 0; i < sub.getElement1().size(); i++) {
                 OWLClass element = sub.getElement1().get(i);
@@ -1332,6 +1333,20 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
             for (OWLClass c : sub.getElement1()) {
                 Node<OWLClass> v2 = containsClass(hierarchy, c);
                 if (v2 != null) {
+                    if(c.equals(OWLClassNode.getTopNode().getRepresentativeElement()) || c.equals(OWLClassNode.getBottomNode().getRepresentativeElement())){
+                        for (DefaultEdge edge : hierarchy.outgoingEdgesOf(vertex)) {
+                            hierarchy.addEdge(v2, hierarchy.getEdgeTarget(edge));
+                        }
+                        hierarchy.removeVertex(vertex);
+                        OWLClassNode test = new OWLClassNode(v2.getEntities());
+                        test.add(sub.getElement0());
+                        hierarchy.addVertex(test);
+                        for (DefaultEdge edge : hierarchy.outgoingEdgesOf(v2)) {
+                            hierarchy.addEdge(test, hierarchy.getEdgeTarget(edge));
+                        }
+                        hierarchy.removeVertex(v2);
+                        break;
+                    }
                     try {
                         hierarchy.addDagEdge(vertex, v2);
                     } catch (DirectedAcyclicGraph.CycleFoundException ex) {
@@ -1371,7 +1386,6 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
                 }
             }
         }
-        hierarchy.addVertex(OWLClassNode.getBottomNode());
         for (Node<OWLClass> node : hierarchy.vertexSet()) {
             if (hierarchy.inDegreeOf(node) == 0 && hierarchy.outDegreeOf(node) > 0 && !node.equals(OWLClassNode.getBottomNode())) {
                 try {
