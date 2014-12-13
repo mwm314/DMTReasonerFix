@@ -6,8 +6,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.jgraph.JGraph;
 import org.jgraph.event.GraphModelEvent;
@@ -1322,7 +1320,8 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
                         try {
                             hierarchy.addDagEdge(v, vertex);
                         } catch (DirectedAcyclicGraph.CycleFoundException ex) {
-                            mergeNodes(v, vertex, hierarchy);
+                            hierarchy.removeVertex(v);
+                            vertex.add(classes.get(i));
                         }
                         ArrayList<ArrayList<OWLClass>> temp = new ArrayList<>();
                         for (int j = 0; j < subsumptions.size(); j++) {
@@ -1612,21 +1611,5 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
             }
         }
         return false;
-    }
-
-    private OWLClassNode mergeNodes(OWLClassNode v, OWLClassNode vertex, DirectedAcyclicGraph<Node<OWLClass>, DefaultEdge> hierarchy) {
-        if (hierarchy.containsVertex(v)) {
-            for (DefaultEdge edge : hierarchy.edgesOf(v)) {
-                OWLClassNode node = (OWLClassNode) edge.getTarget();
-                try {
-                    hierarchy.addDagEdge(vertex, node);
-                } catch (DirectedAcyclicGraph.CycleFoundException ex) {
-                    vertex = mergeNodes(vertex, node, hierarchy);
-                }
-            }
-        }
-        vertex.add(v.getRepresentativeElement());
-        hierarchy.removeVertex(v);
-        return vertex;
     }
 }
