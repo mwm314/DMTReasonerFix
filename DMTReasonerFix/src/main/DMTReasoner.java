@@ -1258,6 +1258,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
                 }
             }
         }
+        //Retest subsumption
         for (int i = 0; i < classArray.size(); i++) {
             for (int j = 0; j < classArray.size(); j++) {
                 if (i != j) {
@@ -1396,15 +1397,11 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
                 Node<OWLClass> v2 = containsClass(hierarchy, c);
                 if (v2 != null) {
                     try {
-                        System.out.println("ADDING EDGE " + vertex + " TO " + v2);
-                        System.out.println(hierarchy.vertexSet());
                         hierarchy.addDagEdge(vertex, v2);
                     } catch (DirectedAcyclicGraph.CycleFoundException ex) {
                         //System.out.println("FAILED ON : " + vertex + ", " + v2);
                         //System.out.println("REMOVING : " + vertex);
                         for (DefaultEdge edge : hierarchy.outgoingEdgesOf(vertex)) {
-                            System.out.println(hierarchy.getEdgeSource(edge) + ", " + hierarchy.getEdgeTarget(edge));
-                            System.out.println(v2 + ", " + hierarchy.getEdgeTarget(edge));
                             hierarchy.addEdge(v2, hierarchy.getEdgeTarget(edge));
                         }
                         hierarchy.removeVertex(vertex);
@@ -1412,8 +1409,6 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
                         test.add(sub.getElement0());
                         hierarchy.addVertex(test);
                         for (DefaultEdge edge : hierarchy.outgoingEdgesOf(v2)) {
-                            System.out.println(hierarchy.getEdgeSource(edge) + ", " + hierarchy.getEdgeTarget(edge));
-                            System.out.println(test + ", " + hierarchy.getEdgeTarget(edge));
                             hierarchy.addEdge(test, hierarchy.getEdgeTarget(edge));
                         }
                         hierarchy.removeVertex(v2);
@@ -1432,8 +1427,6 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
                         test.add(sub.getElement0());
                         hierarchy.addVertex(test);
                         for (DefaultEdge edge : hierarchy.outgoingEdgesOf(v2)) {
-                            System.out.println(hierarchy.getEdgeSource(edge) + ", " + hierarchy.getEdgeTarget(edge));
-                            System.out.println(test + ", " + hierarchy.getEdgeTarget(edge));
                             hierarchy.addEdge(test, hierarchy.getEdgeTarget(edge));
                         }
                         hierarchy.removeVertex(v2);
@@ -1444,7 +1437,6 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
         }
         hierarchy.addVertex(OWLClassNode.getBottomNode());
         for (Node<OWLClass> node : hierarchy.vertexSet()) {
-            System.out.println(node);
             if (hierarchy.inDegreeOf(node) == 0 && hierarchy.outDegreeOf(node) > 0 && !node.equals(OWLClassNode.getBottomNode())) {
                 try {
                     hierarchy.addDagEdge(OWLClassNode.getBottomNode(), node);
@@ -1454,69 +1446,6 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
             }
         }
 
-    }
-
-    private void buildClassDAG(DirectedAcyclicGraph<Node<OWLClass>, DefaultEdge> hierarchy, ArrayList<ArrayList<OWLClass>> subsumptions, ArrayList<OWLClass> classes, OWLClassNode vertex) {
-        if (hierarchy.vertexSet().isEmpty()) {
-            hierarchy.addVertex(OWLClassNode.getTopNode());
-            hierarchy.addVertex(OWLClassNode.getBottomNode());
-        }
-        if (!subsumptions.isEmpty()) {
-            for (int i = 0; i < subsumptions.size(); i++) {
-                if (vertex == null) {
-                    if (subsumptions.get(i).isEmpty() || (subsumptions.get(i).size() == 1 && subsumptions.get(i).get(0).getIRI().equals(OWLClassNode.getTopNode().getRepresentativeElement().getIRI()))) {
-                        OWLClassNode v = new OWLClassNode(classes.get(i));
-                        hierarchy.addVertex(v);
-                        try {
-                            hierarchy.addDagEdge(v, OWLClassNode.getTopNode());
-                        } catch (DirectedAcyclicGraph.CycleFoundException ex) {
-                            System.out.println(ex);
-                        }
-                        ArrayList<ArrayList<OWLClass>> temp = new ArrayList<>();
-                        for (int j = 0; j < subsumptions.size(); j++) {
-                            temp.add((ArrayList<OWLClass>) subsumptions.get(j).clone());
-                        }
-                        temp.remove(i);
-                        ArrayList<OWLClass> tempClasses = (ArrayList<OWLClass>) classes.clone();
-                        tempClasses.remove(i);
-                        buildClassDAG(hierarchy, temp, tempClasses, v);
-                    }
-                } else {
-                    if (subsumptions.get(i).contains(vertex.getRepresentativeElement())) {
-                        OWLClassNode v = new OWLClassNode(classes.get(i));
-                        hierarchy.addVertex(v);
-                        try {
-                            hierarchy.addDagEdge(v, vertex);
-                        } catch (DirectedAcyclicGraph.CycleFoundException ex) {
-                            hierarchy.removeVertex(v);
-                            vertex.add(classes.get(i));
-                        }
-                        ArrayList<ArrayList<OWLClass>> temp = new ArrayList<>();
-                        for (int j = 0; j < subsumptions.size(); j++) {
-                            temp.add((ArrayList<OWLClass>) subsumptions.get(j).clone());
-                        }
-                        ArrayList<OWLClass> tempClasses = (ArrayList<OWLClass>) classes.clone();
-                        if (temp.get(i).size() == 1) {
-                            temp.remove(i);
-                            tempClasses.remove(i);
-                        } else {
-                            temp.get(i).remove(vertex.getRepresentativeElement());
-                        }
-                        buildClassDAG(hierarchy, temp, tempClasses, v);
-                    }
-                }
-            }
-        } else {
-            for (Node<OWLClass> node : hierarchy.vertexSet()) {
-                if (hierarchy.inDegreeOf(node) == 0 && hierarchy.outDegreeOf(node) > 0 && !node.equals(OWLClassNode.getBottomNode())) {
-                    try {
-                        hierarchy.addDagEdge(OWLClassNode.getBottomNode(), node);
-                    } catch (DirectedAcyclicGraph.CycleFoundException ex) {
-                        System.out.println(ex);
-                    }
-                }
-            }
-        }
     }
 
     private ArrayList<Set<OWLSubClassOfAxiom>> extend(OWLClass extendClass, Set<OWLSubClassOfAxiom> eCD) {
