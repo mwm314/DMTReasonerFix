@@ -1,8 +1,6 @@
 package main;
 
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
-import com.mxgraph.layout.mxCompactTreeLayout;
-import com.mxgraph.layout.mxFastOrganicLayout;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 import java.util.ArrayList;
@@ -13,15 +11,10 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 
-import org.jgraph.JGraph;
-import org.jgraph.event.GraphModelEvent;
 import org.jgraph.graph.DefaultEdge;
 import org.jgrapht.experimental.dag.*;
-import org.jgrapht.ext.JGraphModelAdapter;
 import org.jgrapht.ext.JGraphXAdapter;
 import org.semanticweb.owlapi.model.AxiomType;
 import org.semanticweb.owlapi.model.IRI;
@@ -888,45 +881,6 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
         return false;
     }
 
-    @Override
-    /**
-     * My attempt at testing whether a class expression is satisfiable for FL-.
-     * So we are assuming no unions or negation of any kind. Just dealing with
-     * Exists, ForAll, and Intersection.
-     */
-    // TODO: Spinning my wheels pretty badly here. Sorry :/. Sleeping on it for
-    // tonight.
-    // Need to find satisfiability wrt our axioms
-	/*
-     * public boolean isSatisfiable(OWLClassExpression classExpr) { //axioms
-     * 
-     * Node<OWLClass> constraintClasses = new OWLClassNode();
-     * Node<OWLObjectPropertyExpression> constraintProperties = new
-     * OWLObjectPropertyNode(); if (classExpr.isAnonymous()) { // Iterate
-     * through this as a set of conjuncts Iterator<OWLClassExpression> iter =
-     * classExpr.asConjunctSet().iterator(); while (iter.hasNext()) {
-     * OWLClassExpression expr = iter.next(); ClassExpressionType type =
-     * expr.getClassExpressionType(); if
-     * (type.equals(ClassExpressionType.OBJECT_ALL_VALUES_FROM)) {
-     * OWLObjectAllValuesFrom subExpr = (OWLObjectAllValuesFrom) expr; // I
-     * assume if we have (ForAll)R.C that C is the filler...but this is not
-     * really clear from the documentation //
-     * addForAllToConstraintSystem(subExpr.getFiller(), constraintSystem);
-     * 
-     * // OWLObjectProperty prop = subExpr.getProperty().asOWLObjectProperty();
-     * } else if (type.equals(ClassExpressionType.OBJECT_SOME_VALUES_FROM)) {
-     * 
-     * } else if (type.equals(ClassExpressionType.OWL_CLASS)) {
-     * 
-     * } else { throw new DMTDoesNotSupportException(
-     * "We only support universal restricitons and limited existential quantification"
-     * ); } } return true; } else { // If it is not anonymous, we know it is a
-     * named class. So, it is satisfiable if it is not in the bottom node if
-     * (!getBottomClassNode().contains(classExpr.asOWLClass())) { return true; }
-     * else { return false; } }
-     * 
-     * }
-     */
     public boolean isSatisfiable(OWLClassExpression classExpr) {
         OWLClass c = new OWLClassImpl(IRI.create("SatisfiabilityTestIRI"));
         OWLSubClassOfAxiom f = new OWLSubClassOfAxiomImpl(c, classExpr, new HashSet<OWLAnnotation>());
@@ -1027,24 +981,6 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
             }
         }
         return true;
-    }
-
-    /**
-     * Recursively add all possible classes to our constraint system
-     *
-     * @param expr
-     * @param cs
-     */
-    // TODO Linked to problem above, sleeping on it
-    private void addForallToConstraintSystem(OWLObjectAllValuesFrom expr, OWLClassNode cs) {
-        if (expr.isAnonymous()) {
-            Iterator<OWLClassExpression> iter = expr.asConjunctSet().iterator();
-            while (iter.hasNext()) {
-
-            }
-        } else {
-            cs.add(expr.asOWLClass());
-        }
     }
 
     @Override
