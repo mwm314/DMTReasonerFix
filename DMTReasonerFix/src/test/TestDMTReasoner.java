@@ -39,9 +39,10 @@ public class TestDMTReasoner {
 	 * Edit this to point to where the ontologies are stored on your local machine.
 	 * I'm not fancy/determined enough to link it to the github repo...
 	 */
-	private String localDirectoryForOntologies = "C:\\Users\\Keechwa\\Documents\\GitHub\\DMTReasonerFix\\DMTreasonerFix\\src\\test\\";
+	//private String localDirectoryForOntologies = "C:\\Users\\Keechwa\\Documents\\GitHub\\DMTReasonerFix\\DMTreasonerFix\\src\\test\\";
+	private String localDirectoryForOntologies = "C:/Users/Matt/Desktop/FinalOntology/";
 	
-	//@Test
+	@Test
 	/**
 	 * Test whether our DAG is being built correctly in the simple case
 	 */
