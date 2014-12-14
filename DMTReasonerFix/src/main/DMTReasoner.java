@@ -1,18 +1,21 @@
 package main;
 
+import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
+import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.view.mxGraph;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JFrame;
 
-import org.jgraph.JGraph;
-import org.jgraph.event.GraphModelEvent;
 import org.jgraph.graph.DefaultEdge;
 import org.jgrapht.experimental.dag.*;
+import org.jgrapht.ext.JGraphXAdapter;
 import org.semanticweb.owlapi.model.AxiomType;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotation;
@@ -137,6 +140,10 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
 
     public void setObjectPropertyNodeHierarchy(DirectedAcyclicGraph<Node<OWLObjectPropertyExpression>, DefaultEdge> objectPropertyNodeHierarchy) {
         this.objectPropertyNodeHierarchy = objectPropertyNodeHierarchy;
+    }
+    	
+    public DirectedAcyclicGraph<Node<OWLClass>, DefaultEdge> getClassNodeHierarcy() {
+    	return this.classNodeHierarchy;
     }
 
     public void dispose() {
@@ -878,45 +885,6 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
         return false;
     }
 
-    @Override
-    /**
-     * My attempt at testing whether a class expression is satisfiable for FL-.
-     * So we are assuming no unions or negation of any kind. Just dealing with
-     * Exists, ForAll, and Intersection.
-     */
-    // TODO: Spinning my wheels pretty badly here. Sorry :/. Sleeping on it for
-    // tonight.
-    // Need to find satisfiability wrt our axioms
-	/*
-     * public boolean isSatisfiable(OWLClassExpression classExpr) { //axioms
-     * 
-     * Node<OWLClass> constraintClasses = new OWLClassNode();
-     * Node<OWLObjectPropertyExpression> constraintProperties = new
-     * OWLObjectPropertyNode(); if (classExpr.isAnonymous()) { // Iterate
-     * through this as a set of conjuncts Iterator<OWLClassExpression> iter =
-     * classExpr.asConjunctSet().iterator(); while (iter.hasNext()) {
-     * OWLClassExpression expr = iter.next(); ClassExpressionType type =
-     * expr.getClassExpressionType(); if
-     * (type.equals(ClassExpressionType.OBJECT_ALL_VALUES_FROM)) {
-     * OWLObjectAllValuesFrom subExpr = (OWLObjectAllValuesFrom) expr; // I
-     * assume if we have (ForAll)R.C that C is the filler...but this is not
-     * really clear from the documentation //
-     * addForAllToConstraintSystem(subExpr.getFiller(), constraintSystem);
-     * 
-     * // OWLObjectProperty prop = subExpr.getProperty().asOWLObjectProperty();
-     * } else if (type.equals(ClassExpressionType.OBJECT_SOME_VALUES_FROM)) {
-     * 
-     * } else if (type.equals(ClassExpressionType.OWL_CLASS)) {
-     * 
-     * } else { throw new DMTDoesNotSupportException(
-     * "We only support universal restricitons and limited existential quantification"
-     * ); } } return true; } else { // If it is not anonymous, we know it is a
-     * named class. So, it is satisfiable if it is not in the bottom node if
-     * (!getBottomClassNode().contains(classExpr.asOWLClass())) { return true; }
-     * else { return false; } }
-     * 
-     * }
-     */
     public boolean isSatisfiable(OWLClassExpression classExpr) {
         OWLClass c = new OWLClassImpl(IRI.create("SatisfiabilityTestIRI"));
         OWLSubClassOfAxiom f = new OWLSubClassOfAxiomImpl(c, classExpr, new HashSet<OWLAnnotation>());
@@ -1017,24 +985,6 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
             }
         }
         return true;
-    }
-
-    /**
-     * Recursively add all possible classes to our constraint system
-     *
-     * @param expr
-     * @param cs
-     */
-    // TODO Linked to problem above, sleeping on it
-    private void addForallToConstraintSystem(OWLObjectAllValuesFrom expr, OWLClassNode cs) {
-        if (expr.isAnonymous()) {
-            Iterator<OWLClassExpression> iter = expr.asConjunctSet().iterator();
-            while (iter.hasNext()) {
-
-            }
-        } else {
-            cs.add(expr.asOWLClass());
-        }
     }
 
     @Override
@@ -1203,6 +1153,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
                 }
             }
         }
+
         // Subsumption
         ArrayList<ArrayList<OWLClass>> subsumptions = new ArrayList<>();
         for (int i = 0; i < classArray.size(); i++) {
@@ -1219,33 +1170,77 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
                         // Second class, description loop
                         for (int l = 0; l < subclassLists.get(i).size(); l++) {
                             boolean flag = true;
-                            if (i == 10) {
-                                System.out.println(subclassLists.get(j).get(k));
-                            }
                             for (OWLClassExpression a : subclassLists.get(j).get(k)) {
                                 if (!matches(subclassLists.get(i).get(l), a)) {
                                     flag = false;
                                     break;
                                 }
-                            }
-                            if (i == 10) {
-                                System.out.println(flag);
+
                             }
                             subsumed = flag || subsumed;
                         }
                     }
-                    if (subsumed) {
+                    if (subsumed && !subsumptions.get(i).contains(classArray.get(j))) {
                         subsumptions.get(i).add(classArray.get(j));
                     }
                 }
             }
-        }/*
+        }
+        // Equivalences
+        ArrayList<ArrayList<OWLClassExpression>> equivalences = new ArrayList<>();
+        for (int i = 0; i < classArray.size(); i++) {
+            equivalences.add(new ArrayList<OWLClassExpression>());
+            for (int j = 0; j < classArray.size(); j++) {
+                if (i != j) {
+                    if (subsumptions.get(i).contains(classArray.get(j)) && subsumptions.get(j).contains(classArray.get(i))) {
+                        equivalences.get(i).add(classArray.get(j));
+                    }
+                }
+            }
+        }
+        //Retest subsumption
+        for (int i = 0; i < classArray.size(); i++) {
+            for (int j = 0; j < classArray.size(); j++) {
+                if (i != j) {
+                    // This is a pairwise class comparison
+                    boolean subsumed = false;
+                    // First class, description loop (needs to be false for all
+                    // values of this loop)
+                    for (int k = 0; k < subclassLists.get(j).size(); k++) {
+                        // Second class, description loop
+                        for (int l = 0; l < subclassLists.get(i).size(); l++) {
+                            boolean flag = true;
+                            for (OWLClassExpression a : subclassLists.get(j).get(k)) {
+                                if (!equivalences.get(j).contains(a)) {
+                                    if (!matches(subclassLists.get(i).get(l), a)) {
+                                        flag = false;
+                                        break;
+                                    }
+                                }
+                            }
+                            subsumed = flag || subsumed;
+                        }
+                    }
+                    if (subsumed && !subsumptions.get(i).contains(classArray.get(j))) {
+                        subsumptions.get(i).add(classArray.get(j));
+                    }
+                }
+            }
+        }
+        System.out.println(equivalences);
+        /*
          * //Satisfiability for (int i = 0; i < classDescriptions.size(); i++) {
          * for (int j = 0; j < classDescriptions.get(i).size(); j++) { if
          * (!isDescSatisfiable(classDescriptions.get(i).get(j))) {
          * subsumptions.get
          * (i).addAll(OWLClassNode.getBottomNode().getEntities()); } } }
          */
+
+        for (ArrayList<OWLClass> list : subsumptions) {
+            if (!list.contains(OWLClassNode.getBottomNode().getRepresentativeElement()) && !list.contains(OWLClassNode.getTopNode().getRepresentativeElement())) {
+                list.add(OWLClassNode.getTopNode().getRepresentativeElement());
+            }
+        }
 
         Hashtable<OWLClass, Set<OWLSubClassOfAxiom>> expressions = new Hashtable<>();
 
@@ -1258,9 +1253,21 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
             expressions.put(classArray.get(i), classDescriptions.get(i).get(0));
         }
         if (hierarchy != null) {
-            buildClassDAG(hierarchy, subsumptions, classArray, null);
+            buildClassDAG(hierarchy, subsumptions, classArray);
             System.out.println(hierarchy);
         }
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(1600, 800);
+        mxGraph graph = (new JGraphXAdapter(hierarchy));
+        mxHierarchicalLayout layout = new mxHierarchicalLayout(graph);
+        //set all properties
+
+        //layout graph
+        layout.execute(graph.getDefaultParent());
+        mxGraphComponent gC = new mxGraphComponent(graph);
+        frame.getContentPane().add(gC);
+        frame.setVisible(true);
         return expressions;
     }
 
@@ -1290,66 +1297,109 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
         // Templates.
     }
 
-    private void buildClassDAG(DirectedAcyclicGraph<Node<OWLClass>, DefaultEdge> hierarchy, ArrayList<ArrayList<OWLClass>> subsumptions, ArrayList<OWLClass> classes, OWLClassNode vertex) {
-        if (hierarchy.vertexSet().isEmpty()) {
-            hierarchy.addVertex(OWLClassNode.getTopNode());
-            hierarchy.addVertex(OWLClassNode.getBottomNode());
+    private void buildClassDAG(DirectedAcyclicGraph<Node<OWLClass>, DefaultEdge> hierarchy, ArrayList<ArrayList<OWLClass>> subsumptions, ArrayList<OWLClass> classes) {
+        hierarchy.addVertex(OWLClassNode.getTopNode());
+        hierarchy.addVertex(OWLClassNode.getBottomNode());
+        ArrayList<Pair<OWLClass, ArrayList<OWLClass>>> subCopy = new ArrayList<>();
+        for (int i = 0; i < subsumptions.size(); i++) {
+            subCopy.add(new Pair<>(classes.get(i), (ArrayList<OWLClass>) subsumptions.get(i).clone()));
         }
-        if (!subsumptions.isEmpty()) {
-            for (int i = 0; i < subsumptions.size(); i++) {
-                if (vertex == null) {
-                    if (subsumptions.get(i).isEmpty() || (subsumptions.get(i).size() == 1 && subsumptions.get(i).get(0).getIRI().equals(OWLClassNode.getTopNode().getRepresentativeElement().getIRI()))) {
-                        OWLClassNode v = new OWLClassNode(classes.get(i));
-                        hierarchy.addVertex(v);
-                        try {
-                            hierarchy.addDagEdge(v, OWLClassNode.getTopNode());
-                        } catch (DirectedAcyclicGraph.CycleFoundException ex) {
-                            System.out.println(ex);
+        Collections.sort(subCopy, new Comparator<Pair<OWLClass, ArrayList<OWLClass>>>() {
+            public int compare(Pair<OWLClass, ArrayList<OWLClass>> a1, Pair<OWLClass, ArrayList<OWLClass>> a2) {
+                return a1.getElement1().size() - a2.getElement1().size(); // assumes you want biggest to smallest
+            }
+        });
+        for (Pair<OWLClass, ArrayList<OWLClass>> sub : subCopy) {
+            Node<OWLClass> vertex = containsClass(hierarchy, sub.getElement0());
+            if (vertex == null) {
+                vertex = new OWLClassNode(sub.getElement0());
+                hierarchy.addVertex(vertex);
+            }
+            ArrayList<OWLClass> removals = new ArrayList<>();
+            for (int i = 0; i < sub.getElement1().size(); i++) {
+                OWLClass element = sub.getElement1().get(i);
+                int indexOf = -1;
+                for (int j = 0; j < subCopy.size(); j++) {
+                    if (element.equals(subCopy.get(j).getElement0())) {
+                        indexOf = j;
+                        break;
+                    }
+                }
+                if (indexOf != -1) {
+                    for (OWLClass subclassOfElement : subCopy.get(indexOf).getElement1()) {
+                        removals.add(subclassOfElement);
+                    }
+                }
+            }
+            //System.out.println("REMOVING " + removals + " FOR CLASS " + vertex);
+            sub.getElement1().removeAll(removals);
+            //System.out.println("REMAINING: " + sub.getElement1());
+            for (OWLClass c : sub.getElement1()) {
+                Node<OWLClass> v2 = containsClass(hierarchy, c);
+                if (v2 != null) {
+                    if(c.equals(OWLClassNode.getTopNode().getRepresentativeElement()) || c.equals(OWLClassNode.getBottomNode().getRepresentativeElement())){
+                        for (DefaultEdge edge : hierarchy.outgoingEdgesOf(vertex)) {
+                            hierarchy.addEdge(v2, hierarchy.getEdgeTarget(edge));
                         }
-                        ArrayList<ArrayList<OWLClass>> temp = new ArrayList<>();
-                        for (int j = 0; j < subsumptions.size(); j++) {
-                            temp.add((ArrayList<OWLClass>) subsumptions.get(j).clone());
+                        hierarchy.removeVertex(vertex);
+                        OWLClassNode test = new OWLClassNode(v2.getEntities());
+                        test.add(sub.getElement0());
+                        hierarchy.addVertex(test);
+                        for (DefaultEdge edge : hierarchy.outgoingEdgesOf(v2)) {
+                            hierarchy.addEdge(test, hierarchy.getEdgeTarget(edge));
                         }
-                        temp.remove(i);
-                        ArrayList<OWLClass> tempClasses = (ArrayList<OWLClass>) classes.clone();
-                        tempClasses.remove(i);
-                        buildClassDAG(hierarchy, temp, tempClasses, v);
+                        hierarchy.removeVertex(v2);
+                        break;
+                    }
+                    try {
+                        hierarchy.addDagEdge(vertex, v2);
+                    } catch (DirectedAcyclicGraph.CycleFoundException ex) {
+                        //System.out.println("FAILED ON : " + vertex + ", " + v2);
+                        //System.out.println("REMOVING : " + vertex);
+                        for (DefaultEdge edge : hierarchy.outgoingEdgesOf(vertex)) {
+                            hierarchy.addEdge(v2, hierarchy.getEdgeTarget(edge));
+                        }
+                        hierarchy.removeVertex(vertex);
+                        OWLClassNode test = new OWLClassNode(v2.getEntities());
+                        test.add(sub.getElement0());
+                        hierarchy.addVertex(test);
+                        for (DefaultEdge edge : hierarchy.outgoingEdgesOf(v2)) {
+                            hierarchy.addEdge(test, hierarchy.getEdgeTarget(edge));
+                        }
+                        hierarchy.removeVertex(v2);
+                        break;
                     }
                 } else {
-                    if (subsumptions.get(i).contains(vertex.getRepresentativeElement())) {
-                        OWLClassNode v = new OWLClassNode(classes.get(i));
-                        hierarchy.addVertex(v);
-                        try {
-                            hierarchy.addDagEdge(v, vertex);
-                        } catch (DirectedAcyclicGraph.CycleFoundException ex) {
-                            mergeNodes(v, vertex, hierarchy);
-                        }
-                        ArrayList<ArrayList<OWLClass>> temp = new ArrayList<>();
-                        for (int j = 0; j < subsumptions.size(); j++) {
-                            temp.add((ArrayList<OWLClass>) subsumptions.get(j).clone());
-                        }
-                        ArrayList<OWLClass> tempClasses = (ArrayList<OWLClass>) classes.clone();
-                        if (temp.get(i).size() == 1) {
-                            temp.remove(i);
-                            tempClasses.remove(i);
-                        } else {
-                            temp.get(i).remove(vertex.getRepresentativeElement());
-                        }
-                        buildClassDAG(hierarchy, temp, tempClasses, v);
-                    }
-                }
-            }
-        } else {
-            for (Node<OWLClass> node : hierarchy.vertexSet()) {
-                if (hierarchy.inDegreeOf(node) == 0 && hierarchy.outDegreeOf(node) > 0 && !node.equals(OWLClassNode.getBottomNode())) {
                     try {
-                        hierarchy.addDagEdge(OWLClassNode.getBottomNode(), node);
+                        //System.out.println("ADDING EDGE " + vertex + " TO " + v2);
+                        OWLClassNode d = new OWLClassNode(c);
+                        hierarchy.addVertex(d);
+                        hierarchy.addDagEdge(vertex, d);
                     } catch (DirectedAcyclicGraph.CycleFoundException ex) {
-                        System.out.println(ex);
+                        hierarchy.removeVertex(vertex);
+                        v2 = containsClass(hierarchy, c);
+                        OWLClassNode test = new OWLClassNode(v2.getEntities());
+                        test.add(sub.getElement0());
+                        hierarchy.addVertex(test);
+                        for (DefaultEdge edge : hierarchy.outgoingEdgesOf(v2)) {
+                            hierarchy.addEdge(test, hierarchy.getEdgeTarget(edge));
+                        }
+                        hierarchy.removeVertex(v2);
+                        break;
                     }
                 }
             }
         }
+        for (Node<OWLClass> node : hierarchy.vertexSet()) {
+            if (hierarchy.inDegreeOf(node) == 0 && hierarchy.outDegreeOf(node) > 0 && !node.equals(OWLClassNode.getBottomNode())) {
+                try {
+                    hierarchy.addDagEdge(OWLClassNode.getBottomNode(), node);
+                } catch (DirectedAcyclicGraph.CycleFoundException ex) {
+                    System.out.println(ex);
+                }
+            }
+        }
+
     }
 
     private ArrayList<Set<OWLSubClassOfAxiom>> extend(OWLClass extendClass, Set<OWLSubClassOfAxiom> eCD) {
@@ -1614,19 +1664,39 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
         return false;
     }
 
-    private OWLClassNode mergeNodes(OWLClassNode v, OWLClassNode vertex, DirectedAcyclicGraph<Node<OWLClass>, DefaultEdge> hierarchy) {
-        if (hierarchy.containsVertex(v)) {
-            for (DefaultEdge edge : hierarchy.edgesOf(v)) {
-                OWLClassNode node = (OWLClassNode) edge.getTarget();
-                try {
-                    hierarchy.addDagEdge(vertex, node);
-                } catch (DirectedAcyclicGraph.CycleFoundException ex) {
-                    vertex = mergeNodes(vertex, node, hierarchy);
-                }
+    private Node<OWLClass> containsClass(DirectedAcyclicGraph<Node<OWLClass>, DefaultEdge> hierarchy, OWLClass c) {
+        for (Node<OWLClass> node : hierarchy.vertexSet()) {
+            if (node.contains(c)) {
+                return node;
             }
         }
-        vertex.add(v.getRepresentativeElement());
-        hierarchy.removeVertex(v);
-        return vertex;
+        return null;
+    }
+}
+
+class Pair<K, V> {
+
+    private final K element0;
+    private final V element1;
+
+    public static <K, V> Pair<K, V> createPair(K element0, V element1) {
+        return new Pair<K, V>(element0, element1);
+    }
+
+    public Pair(K element0, V element1) {
+        this.element0 = element0;
+        this.element1 = element1;
+    }
+
+    public K getElement0() {
+        return element0;
+    }
+
+    public V getElement1() {
+        return element1;
+    }
+
+    public String toString() {
+        return "<" + element0.toString() + ", " + element1.toString() + ">";
     }
 }

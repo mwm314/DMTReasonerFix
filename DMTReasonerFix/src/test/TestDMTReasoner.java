@@ -6,8 +6,12 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.swing.JFrame;
+
+import main.DMTReasoner;
 import main.DMTReasonerFactory;
 
+import org.jgrapht.ext.JGraphXAdapter;
 import org.junit.Test;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.IRI;
@@ -21,12 +25,17 @@ import org.semanticweb.owlapi.reasoner.NodeSet;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.reasoner.impl.OWLClassNodeSet;
 
+import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
+import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.view.mxGraph;
+
 import uk.ac.manchester.cs.owl.owlapi.OWLClassImpl;
 import uk.ac.manchester.cs.owl.owlapi.OWLObjectIntersectionOfImpl;
 import uk.ac.manchester.cs.owl.owlapi.OWLObjectUnionOfImpl;
 
 /**
  * Class to test the DMTreasoner
+ * NOTE: TO SEE THE DAG, RUN TestOntologyRead.java INSTEAD OF THESE JUNIT TESTS
  * 
  * @author Matt
  *
@@ -50,10 +59,11 @@ public class TestDMTReasoner {
 		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File(localDirectoryForOntologies + "simpleParent.owl"));
 		OWLReasoner reasoner = new DMTReasonerFactory().createReasoner(ont3);
 		
-		System.out.println("Bottom: " + reasoner.getBottomClassNode());
-		System.out.println("Top: " + reasoner.getTopClassNode());
+		OWLClass nothing = new OWLClassImpl(IRI.create("owl:Nothing"));
+		OWLClass thing = new OWLClassImpl(IRI.create("owl:Thing"));
 		
-		assertEquals(1,0);
+		assertTrue(reasoner.getBottomClassNode().isBottomNode());
+		assertTrue(reasoner.getTopClassNode().isTopNode());
 	}
 
 	@Test
@@ -115,7 +125,7 @@ public class TestDMTReasoner {
 
 	}
 	
-	//@Test
+	@Test
 	/**
 	 * Here we test whether A ^ -A is unsatisfiable
 	 */
@@ -153,7 +163,7 @@ public class TestDMTReasoner {
 		assertTrue("A union -A is unsatisfiale", reasoner.isSatisfiable(new OWLObjectUnionOfImpl(aIntersectNota)));
 	}
 	
-	//@Test
+	@Test
 	//This one infinite loops for now
 	/**
 	 * In this case, we want to test some completeness of unions.
@@ -192,7 +202,7 @@ public class TestDMTReasoner {
 		assertTrue(topNode.contains(person));
 	}
 	
-	//@Test
+	@Test
 	//This overflows the stack, infinite recursion issue
 	/**
 	 * Here we have a class UnsatisfiableMother, which, as you might have guessed, is unsatisfiable.
