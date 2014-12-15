@@ -98,10 +98,10 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
 
     // Given axioms from the ontology
     private Set<OWLAxiom> axioms;
-
+    
     //If user wants to see text output of the hierarchy, specifiy the verbose option
     private boolean verbose = false;
-
+    
     //If user wants to see visual output of the class hierarchy, specify the showGraph option
     private boolean showGraph = false;
 
@@ -109,6 +109,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
     private ArrayList<ArrayList<Set<OWLSubClassOfAxiom>>> classDescriptions = new ArrayList<>();
     private ArrayList<Boolean> primitives = new ArrayList<>();
 
+    
     /**
      * Constructor for DMTReasoner
      */
@@ -125,7 +126,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
      */
     public DMTReasoner() {
     }
-
+    
     /**
      * ONLY FOR TESTING DAG METHODS
      */
@@ -146,27 +147,25 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
     public void setObjectPropertyNodeHierarchy(DirectedAcyclicGraph<Node<OWLObjectPropertyExpression>, DefaultEdge> objectPropertyNodeHierarchy) {
         this.objectPropertyNodeHierarchy = objectPropertyNodeHierarchy;
     }
-
+    
     /**
      * Set this to true if you want to see console output
-     *
      * @param verbose
      */
     public void setVerbose(boolean verbose) {
-        this.verbose = verbose;
+    	this.verbose = verbose;
     }
-
+    
     /**
      * Set this to true if you want to see the visualization of the DAG
-     *
      * @param showGraph
      */
     public void setShowGraph(boolean showGraph) {
-        this.showGraph = showGraph;
+    	this.showGraph = showGraph;
     }
 
     public void dispose() {
-        throw new DMTDoesNotSupportException("No dispose() method");
+    	throw new DMTDoesNotSupportException("No dispose() method");
     }
 
     @Override
@@ -232,7 +231,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
      * edges
      */
     public Node<OWLObjectPropertyExpression> getBottomObjectPropertyNode() {
-        // Should this return Node<OWLObjectProperty>?! Confusing...
+
         Iterator<Node<OWLObjectPropertyExpression>> iter = objectPropertyNodeHierarchy.iterator();
         while (iter.hasNext()) {
 
@@ -252,9 +251,8 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
 
     @Override
     /**
-     * Return the bufferingMode. In our case, we do buffer, so axioms can be
-     * updated programmatically
-     *
+     * Return the bufferingMode. In our case,
+     * we do buffer, so axioms can be updated programmatically
      * @return
      */
     public BufferingMode getBufferingMode() {
@@ -268,7 +266,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
 
     @Override
     public Set<OWLLiteral> getDataPropertyValues(OWLNamedIndividual individual, OWLDataProperty dataProperty) {
-        throw new DMTDoesNotSupportException("Reasoning over properties not supported");
+    	throw new DMTDoesNotSupportException("Reasoning over properties not supported");
     }
 
     @Override
@@ -542,14 +540,14 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
 
     @Override
     /**
-     * Gets the subclasses for a given class expression. If the class is not
-     * anonymous, we can just find its node and return the subclasses Else, we
-     * first reason over the ontology with the new class expression, and add it
-     * to the class hierarchy DAG, and then return the subclasses
-     *
+     * Gets the subclasses for a given class expression.
+     * If the class is not anonymous, we can just find its node and return the subclasses
+     * Else, we first reason over the ontology with the new class expression, and add it to
+     * the class hierarchy DAG, and then return the subclasses
      * @param classExpr
-     * @param direct If direct is true, returns all subclasses. Else, returns
-     * subclasses directly pointing to the classExpr node
+     * @param direct
+     * 			If direct is true, returns all subclasses. Else, returns subclasses directly pointing
+     * 			to the classExpr node
      * @return
      */
     public NodeSet<OWLClass> getSubClasses(OWLClassExpression classExpr, boolean direct) {
@@ -569,20 +567,22 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
         Iterator<Node<OWLClass>> iter = testGraph.iterator();
 
         while (iter.hasNext()) {
-            Node<OWLClass> currentClassNode = iter.next();
-            if (currentClassNode.contains(owlclass)) {
-
-                //If direct, just get the nodes "directly" under this one
-                if (direct) {
+        	Node<OWLClass> currentClassNode = iter.next();
+        	if (currentClassNode.contains(owlclass)) {
+        	
+        		//If direct, just get the nodes "directly" under this one
+            	if (direct) {
                     Set<DefaultEdge> incomingEdges = testGraph.incomingEdgesOf(currentClassNode);
 
                     for (DefaultEdge e : incomingEdges) {
                         Node<OWLClass> classNode = testGraph.getEdgeSource(e);
                         instances.addNode(classNode);
                     }
-                } //If not direct, get all nodes under the current node recursively
-                else {
-                    return getSubClassesRecursively(currentClassNode, instances, testGraph);
+                }
+            	
+            	//If not direct, get all nodes under the current node recursively
+            	else {
+                	return getSubClassesRecursively(currentClassNode, instances, testGraph);
                 }
 
             }
@@ -590,10 +590,9 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
 
         return instances;
     }
-
+    
     /**
-     * Recursive helper method to assist in getting all subclasses of a given
-     * node
+     * Recursive helper method to assist in getting all subclasses of a given node
      */
     private OWLClassNodeSet getSubClassesRecursively(Node<OWLClass> currentNode, OWLClassNodeSet instances, DirectedAcyclicGraph<Node<OWLClass>, DefaultEdge> graph) {
 
@@ -1349,33 +1348,27 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
             if (verbose) {
                 System.out.println("CLASS: " + classArray.get(i));
                 System.out.println("SUBCLASSES: " + subsumptions.get(i));
-                for (int j = 0; j < classDescriptions.get(i).size(); j++) {
-                    System.out.println("FACTS: " + classDescriptions.get(i).get(j));
-                }
+                System.out.println("FACTS: " + classDescriptions.get(i).get(0));
             }
             expressions.put(classArray.get(i), classDescriptions.get(i).get(0));
         }
         if (hierarchy != null) {
             buildClassDAG(hierarchy, subsumptions, classArray);
         }
-
+        
         if (showGraph) {
-            JFrame frame = new JFrame();
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(1600, 800);
-            mxGraph graph = (new JGraphXAdapter(hierarchy));
-            mxHierarchicalLayout layout = new mxHierarchicalLayout(graph);
+        	JFrame frame = new JFrame();
+        	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        	frame.setSize(1600, 800);
+        	mxGraph graph = (new JGraphXAdapter(hierarchy));
+        	mxHierarchicalLayout layout = new mxHierarchicalLayout(graph);
         	//set all properties
 
-            //layout graph
-            layout.execute(graph.getDefaultParent());
-            mxGraphComponent gC = new mxGraphComponent(graph);
-            frame.getContentPane().add(gC);
-            frame.setVisible(true);
-        }
-        for(int i = 0; i < classArray.size(); i++){
-            System.out.println(classArray.get(i));
-            System.out.println(primitives.get(i));
+        	//layout graph
+        	layout.execute(graph.getDefaultParent());
+        	mxGraphComponent gC = new mxGraphComponent(graph);
+        	frame.getContentPane().add(gC);
+        	frame.setVisible(true);
         }
         
         return expressions;
@@ -1427,7 +1420,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
             for (OWLClass c : sub.getElement1()) {
                 Node<OWLClass> v2 = containsClass(hierarchy, c);
                 if (v2 != null) {
-                    if (c.equals(OWLClassNode.getBottomNode().getRepresentativeElement())) {
+                    if(c.equals(OWLClassNode.getTopNode().getRepresentativeElement()) || c.equals(OWLClassNode.getBottomNode().getRepresentativeElement())){
                         for (DefaultEdge edge : hierarchy.outgoingEdgesOf(vertex)) {
                             hierarchy.addEdge(v2, hierarchy.getEdgeTarget(edge));
                         }
@@ -1441,7 +1434,6 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
                         hierarchy.removeVertex(v2);
                         break;
                     }
-                    //c.equals(OWLClassNode.getTopNode().getRepresentativeElement()) || 
                     try {
                         hierarchy.addDagEdge(vertex, v2);
                     } catch (DirectedAcyclicGraph.CycleFoundException ex) {
@@ -1494,37 +1486,26 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
     }
 
     private ArrayList<Set<OWLSubClassOfAxiom>> extend(OWLClass extendClass, Set<OWLSubClassOfAxiom> eCD) {
-        //System.out.println("Extend class " + extendClass);
-        //System.out.println("Description: " + eCD);
         return recurseExtend(extendClass, eCD, null, null);
     }
 
-    private ArrayList<Set<OWLSubClassOfAxiom>> recurseExtend(final OWLClass extendClass, Set<OWLSubClassOfAxiom> eCD, final OWLSubClassOfAxiomImpl add, final Set<OWLSubClassOfAxiom> sub) {
-        //System.out.println("Extend class " + extendClass);
-        //System.out.println("Description: " + eCD);
+    private ArrayList<Set<OWLSubClassOfAxiom>> recurseExtend(final OWLClass extendClass, Set<OWLSubClassOfAxiom> eCD, final OWLSubClassOfAxiomImpl add, final ArrayList<OWLSubClassOfAxiom> sub) {
         ArrayList<Set<OWLSubClassOfAxiom>> interpretations = new ArrayList<>();
         Set<OWLSubClassOfAxiom> extendClassDescriptions = new HashSet<>(eCD);
         if (sub != null) {
             for (OWLSubClassOfAxiom bx : sub) {
                 if (bx.getSuperClass() instanceof OWLObjectUnionOf) {
-                    System.out.println("REMOVING: " + bx);
                     extendClassDescriptions.remove(bx);
                 }
             }
         }
         if (add != null) {
-            //System.out.println("ADDING: " + add);
             extendClassDescriptions.add(add);
         }
-
         boolean done = false;
-        if (!isDescSatisfiable(extendClassDescriptions)) {
-            done = true;
-        }
-        //System.out.println("New Description: " + extendClassDescriptions);
         while (!done) {
-            Set<OWLSubClassOfAxiom> adds = new HashSet<>();
-            Set<OWLSubClassOfAxiom> subs = new HashSet<>();
+            ArrayList<OWLSubClassOfAxiom> adds = new ArrayList<>();
+            ArrayList<OWLSubClassOfAxiom> subs = new ArrayList<>();
             for (OWLSubClassOfAxiom a : extendClassDescriptions) {
                 OWLClassExpression d = a.getSuperClass().getNNF();
                 if (!d.isAnonymous()) {
@@ -1676,10 +1657,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
                 }
             }
             extendClassDescriptions.removeAll(subs);
-            //System.out.println("REMOVING: " + subs);
-            adds.removeAll(subs);
             extendClassDescriptions.addAll(adds);
-            //System.out.println("ADDING: " + adds);
             if (adds.equals(subs)) {
                 done = true;
             }

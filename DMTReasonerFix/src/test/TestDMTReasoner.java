@@ -363,43 +363,6 @@ public class TestDMTReasoner {
 
 		assertTrue("A union -A is unsatisfiale", reasoner.isSatisfiable(new OWLObjectUnionOfImpl(aIntersectNota)));
 	}
-	
-	//@Test
-	/**
-	 * Test if we can be bother a Grandmother and a Father
-	 */
-	public void testGrandmotherFatherSatisfiability() throws Exception {
-		// Load .owl file and reason over it
-		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File(localDirectoryForOntologies + "correctAndFinalParent.owl"));
-		OWLReasoner reasoner = new DMTReasonerFactory().createReasoner(ont3);
-		
-		HashSet<OWLClass> classes = new HashSet<>();
-
-		OWLClass father = null;
-		OWLClass grandmother = null;
-
-		Set<OWLAxiom> axioms = ont3.getAxioms();
-		for (OWLAxiom a : axioms) {
-			classes.addAll(a.getClassesInSignature());
-		}
-
-		// Grab the classes we need
-		for (OWLClass c : classes) {
-			if (c.getIRI().toString().endsWith("Father")) {
-				father = new OWLClassImpl(c.getIRI());
-			}
-			if (c.getIRI().toString().endsWith("Grandmother")) {
-				grandmother = new OWLClassImpl(c.getIRI());
-			}
-		}
-
-		HashSet<OWLClassExpression> intersection = new HashSet<OWLClassExpression>();
-
-		intersection.add(father);
-		intersection.add(grandmother);
-
-		assertFalse(reasoner.isSatisfiable(new OWLObjectIntersectionOfImpl(intersection)));
-	}
 
 	@Test
 	/**
@@ -476,84 +439,5 @@ public class TestDMTReasoner {
 		// See that dad is the one and only equivalent class
 		assertTrue(equivalentClasses.contains(dad));
 		assertTrue(equivalentClasses.getSize() == 2);
-	}
-
-	// @Test
-	public void chickenNuggetBenchmark() throws Exception {
-		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File(localDirectoryForOntologies + "MusicOntologySimplified.owl"));
-		OWLReasoner reasoner = new DMTReasonerFactory().createReasoner(ont3, true, true);
-		DMTReasoner dmtReasoner = (DMTReasoner) reasoner;
-		dmtReasoner.setShowGraph(true);
-		Thread.sleep(100000);
-	}
-
-	// @Test
-	// This overflows the stack, infinite recursion issue
-	/**
-	 * Here we have a class UnsatisfiableMother, which, as you might have
-	 * guessed, is unsatisfiable. The definition is (hasChild max 0 Person) and
-	 * Mother But Mother is a subclass of Parent, which necessarily have
-	 * children. Thus, UnsatisfiableMother is indeed unsatisfiable
-	 * 
-	 * @throws Exception
-	 */
-	public void testUnsatisfiableClass() throws Exception {
-		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File(localDirectoryForOntologies + "correctDefsCardinalityAndEquivalency.owl"));
-		OWLReasoner reasoner = new DMTReasonerFactory().createReasoner(ont3);
-
-		Node<OWLClass> bottomNode = reasoner.getBottomClassNode();
-
-		HashSet<OWLClass> classes = new HashSet<>();
-
-		OWLClass unsatMother = null;
-
-		Set<OWLAxiom> axioms = ont3.getAxioms();
-		for (OWLAxiom a : axioms) {
-			classes.addAll(a.getClassesInSignature());
-		}
-
-		// Grab the unsatMother class
-		for (OWLClass c : classes) {
-			if (c.getIRI().toString().endsWith("leMother")) {
-				unsatMother = new OWLClassImpl(c.getIRI());
-			}
-		}
-
-		// Check it is in the right spot in the DAG
-		assertTrue(bottomNode.contains(unsatMother));
-	}
-
-	// @Test
-	// This also causes an infinite loop, so unions are likely not the issue
-	/**
-	 * This is really just to see if unions were contributing to the problem of
-	 * the previous method
-	 * 
-	 * @throws Exception
-	 */
-	public void testUnsatisfiableClassNoUnion() throws Exception {
-		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File(localDirectoryForOntologies + "noUnion.owl"));
-		OWLReasoner reasoner = new DMTReasonerFactory().createReasoner(ont3);
-
-		Node<OWLClass> bottomNode = reasoner.getBottomClassNode();
-
-		HashSet<OWLClass> classes = new HashSet<>();
-
-		OWLClass unsatMother = null;
-
-		Set<OWLAxiom> axioms = ont3.getAxioms();
-		for (OWLAxiom a : axioms) {
-			classes.addAll(a.getClassesInSignature());
-		}
-
-		// Grab the unsatMother class
-		for (OWLClass c : classes) {
-			if (c.getIRI().toString().endsWith("leMother")) {
-				unsatMother = new OWLClassImpl(c.getIRI());
-			}
-		}
-
-		// Check it is in the right spot in the DAG
-		assertTrue(bottomNode.contains(unsatMother));
 	}
 }
