@@ -57,7 +57,7 @@ public class TestOntologyRead {
 		//OWLOntology ont = ontManager.loadOntologyFromOntologyDocument(new File("C:\\Users\\Keechwa\\Documents\\GitHub\\DMTReasoner\\DTMreasoner\\src\\test\\testOntology.owl"));
 		// OWLOntology ont2 = ontManager.loadOntologyFromOntologyDocument(new
 		// File("C:\\Users\\Keechwa\\Documents\\GitHub\\DMTReasoner\\DTMreasoner\\src\\test\\simpleParent.owl"));
-		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File("C:/Users/Matt/Desktop/FinalOntology/correctDefsCardinalityAndEquivalency.owl"));
+		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File("C:/Users/Matt/Desktop/FinalOntology/ChickenNuggetPackage.owl"));
 		Set<OWLAxiom> axioms = ont3.getAxioms();
 		
 		Iterator<OWLAxiom> iter = axioms.iterator();

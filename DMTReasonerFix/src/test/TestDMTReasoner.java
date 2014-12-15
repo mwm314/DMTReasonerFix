@@ -23,6 +23,7 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.reasoner.Node;
 import org.semanticweb.owlapi.reasoner.NodeSet;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
+import org.semanticweb.owlapi.reasoner.impl.OWLClassNode;
 import org.semanticweb.owlapi.reasoner.impl.OWLClassNodeSet;
 
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
@@ -164,7 +165,6 @@ public class TestDMTReasoner {
 	}
 	
 	@Test
-	//This one infinite loops for now
 	/**
 	 * In this case, we want to test some completeness of unions.
 	 * We have a class Parent defined as (hasChild some Person), subclass of Person.
@@ -195,14 +195,53 @@ public class TestDMTReasoner {
 			}
 		}
 		
-		System.out.println(topNode);
-		System.out.println(reasoner.getBottomClassNode());
-		
 		//Check it is in the right spot in the DAG
 		assertTrue(topNode.contains(person));
 	}
 	
 	@Test
+	/**
+	 * Here we want to test that Dad and Father are in the same node,
+	 * because they have been defined as equivalent classes
+	 */
+	public void testDadFatherEquivalence() throws Exception {
+		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File(localDirectoryForOntologies + "moreComplexParentWithequivalentClasses.owl"));
+		OWLReasoner reasoner = new DMTReasonerFactory().createReasoner(ont3);
+		
+		HashSet<OWLClass> classes = new HashSet<>();
+
+		OWLClass father = null;
+		OWLClass dad = null;
+
+		Set<OWLAxiom> axioms = ont3.getAxioms();
+		for (OWLAxiom a : axioms) {
+			classes.addAll(a.getClassesInSignature());
+		}
+
+		//Grab the father and grandfather classes
+		for (OWLClass c : classes) {
+			if (c.getIRI().toString().endsWith("Father")) {
+				father = new OWLClassImpl(c.getIRI());
+			}
+			if (c.getIRI().toString().endsWith("Dad")) {
+				dad = new OWLClassImpl(c.getIRI());
+				System.out.println("DAD: " + dad);
+			}
+		}
+
+		//If we didn't grab them, fail the test
+		if (father == null || dad == null) {
+			assertEquals("Father or dad is null", 0, 1);
+		}
+
+		Node<OWLClass> equivalentClasses = reasoner.getEquivalentClasses(father);
+
+		//See that dad is the one and only equivalent class
+		assertTrue(equivalentClasses.contains(dad));
+		assertTrue(equivalentClasses.getSize() == 2);
+	}
+	
+	//@Test
 	//This overflows the stack, infinite recursion issue
 	/**
 	 * Here we have a class UnsatisfiableMother, which, as you might have guessed, is unsatisfiable.
