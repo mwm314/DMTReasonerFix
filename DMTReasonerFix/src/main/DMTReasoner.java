@@ -3,6 +3,7 @@ package main;
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,6 +12,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
 import javax.swing.JFrame;
 
 import org.jgraph.graph.DefaultEdge;
@@ -295,6 +297,10 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
      *
      */
     public NodeSet<OWLClass> getDisjointClasses(OWLClassExpression owlClassExpr) {
+    	if (owlClassExpr.isAnonymous()) {
+    		
+    	}
+    	
         if (!owlClassExpr.isAnonymous()) {
 
             // Get all the disjoint classes
@@ -319,7 +325,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
 
             // No disjoint classes found
             return new OWLClassNodeSet();
-        } // TODO Partial implementation
+        }
         else {
             throw new DMTDoesNotSupportException("Only grab disjoint classes for a given owl class, not owlclass expression");
         }
@@ -332,7 +338,6 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
      */
     public NodeSet<OWLDataProperty> getDisjointDataProperties(OWLDataPropertyExpression dataPropExpr) {
         if (!dataPropExpr.isAnonymous()) {
-
             // Get all the disjoint classes
             OWLDataPropertyNodeSet allDisjointDataProperties = new OWLDataPropertyNodeSet();
             for (OWLAxiom a : axioms) {
@@ -355,7 +360,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
 
             // No disjoint DataPropertyes found
             return new OWLDataPropertyNodeSet();
-        } // TODO Partial implementation
+        }
         else {
             throw new DMTDoesNotSupportException("Only grab disjoint classes for a given owl dataproperty, not owl dataproperty expression");
         }
@@ -387,7 +392,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
 
             // No disjoint DataPropertyes found
             return new OWLObjectPropertyNodeSet();
-        } // TODO Partial implementation
+        } 
         else {
             throw new DMTDoesNotSupportException("Only grab disjoint classes for a given owl object property, not owl object property expression");
         }
@@ -422,51 +427,41 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
 
     @Override
     public Node<OWLDataProperty> getEquivalentDataProperties(OWLDataProperty dataProp) {
-        // TODO Auto-generated method stub
-        return null;
+    	throw new DMTDoesNotSupportException("Property reasoning not supported.");
     }
 
     @Override
     public Node<OWLObjectPropertyExpression> getEquivalentObjectProperties(OWLObjectPropertyExpression objectPropExpr) {
-        // TODO Auto-generated method stub
-        return null;
+    	throw new DMTDoesNotSupportException("Property reasoning not supported.");
     }
 
-    /**
-     * Not entirely sure how "fresh entities" are defined. For now, we will
-     * disallow them
-     */
     @Override
+    /**
+     * Disallow FreshEntities
+     */
     public FreshEntityPolicy getFreshEntityPolicy() {
         return FreshEntityPolicy.DISALLOW;
     }
 
-    /**
-     *
-     * This means that if two individuals are marked as being owl:sameAs, we
-     * group them into the same node. So, if i,j,k are individuals all of class
-     * C, i owl:sameAs j, and we want to return all instances of C, then we will
-     * return a node set with two nodes, one node with i and j, and the other
-     * node with k.
-     */
+    
     @Override
+    /**
+    *
+    * This means that if two individuals are marked as being owl:sameAs, we
+    * group them into the same node. So, if i,j,k are individuals all of class
+    * C, i owl:sameAs j, and we want to return all instances of C, then we will
+    * return a node set with two nodes, one node with i and j, and the other
+    * node with k.
+    */
     public IndividualNodeSetPolicy getIndividualNodeSetPolicy() {
         return IndividualNodeSetPolicy.BY_SAME_AS;
     }
 
     @Override
     public NodeSet<OWLNamedIndividual> getInstances(OWLClassExpression arg0, boolean arg1) {
-        // TODO Auto-generated method stub
-        return null;
+    	throw new DMTDoesNotSupportException("Reasoning over individuals not supported");
     }
 
-    /**
-     * We do not handle inverse properties, so the DTMReasoner object will
-     * always throw an exception when this method is called
-     *
-     * @param arg0
-     * @return
-     */
     @Override
     public Node<OWLObjectPropertyExpression> getInverseObjectProperties(OWLObjectPropertyExpression arg0) {
         throw new DMTDoesNotSupportException("Inverse Properties not supported.");
@@ -474,20 +469,17 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
 
     @Override
     public NodeSet<OWLClass> getObjectPropertyDomains(OWLObjectPropertyExpression pe, boolean direct) {
-        // TODO Auto-generated method stub
-        return null;
+    	throw new DMTDoesNotSupportException("Domains can potentially can break soundness of structural subsumption");
     }
 
     @Override
     public NodeSet<OWLClass> getObjectPropertyRanges(OWLObjectPropertyExpression arg0, boolean arg1) {
-        // TODO Auto-generated method stub
-        return null;
+    	throw new DMTDoesNotSupportException("Ranges can potentially can break soundness of structural subsumption");
     }
 
     @Override
     public NodeSet<OWLNamedIndividual> getObjectPropertyValues(OWLNamedIndividual arg0, OWLObjectPropertyExpression arg1) {
-        // TODO Auto-generated method stub
-        return null;
+    	throw new DMTDoesNotSupportException("Not implemented");
     }
 
     @Override
@@ -502,14 +494,12 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
 
     @Override
     public List<OWLOntologyChange> getPendingChanges() {
-        // TODO Auto-generated method stub
-        return null;
+    	throw new DMTDoesNotSupportException("Not supported");
     }
 
     @Override
     public Set<InferenceType> getPrecomputableInferenceTypes() {
-        // TODO Auto-generated method stub
-        return null;
+    	throw new DMTDoesNotSupportException("Not supported");
     }
 
     @Override
@@ -527,6 +517,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
         return ontology;
     }
 
+    @Override
     /**
      * Individuals are represented by the individuals node set. We return the
      * Node of individuals that is contains the specified individual. Same
@@ -536,7 +527,6 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
      * @param individual
      * @return
      */
-    @Override
     public Node<OWLNamedIndividual> getSameIndividuals(OWLNamedIndividual individual) {
         Iterator<Node<OWLNamedIndividual>> iter = individuals.iterator();
         while (iter.hasNext()) {
@@ -610,8 +600,6 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
             instances.addNode(currentNode);
         }
 
-        Iterator<Node<OWLClass>> iter = graph.iterator();
-
         Set<DefaultEdge> incomingEdges = graph.incomingEdgesOf(currentNode);
         Iterator<DefaultEdge> edgeIter = incomingEdges.iterator();
 
@@ -624,6 +612,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
         return instances;
     }
 
+    @Override
     /**
      * Returns the sub dataProperties of the specified dataProperty.
      *
@@ -633,7 +622,6 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
      * hierarchy)
      * @return
      */
-    @Override
     public NodeSet<OWLDataProperty> getSubDataProperties(OWLDataProperty dataProperty, boolean direct) {
 
         OWLDataPropertyNodeSet instances = new OWLDataPropertyNodeSet();
@@ -682,26 +670,29 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
             instances.addNode(currentNode);
         }
 
-        Iterator<Node<OWLDataProperty>> iter = dataPropertyNodeHierarchy.iterator();
 
-        // This could probably be a bit more efficient, but *should* work
-        while (iter.hasNext()) {
+        Set<DefaultEdge> incomingEdges = dataPropertyNodeHierarchy.incomingEdgesOf(currentNode);
+        Iterator<DefaultEdge> edgeIter = incomingEdges.iterator();
 
-            Set<DefaultEdge> incomingEdges = dataPropertyNodeHierarchy.incomingEdgesOf(currentNode);
-            Iterator<DefaultEdge> edgeIter = incomingEdges.iterator();
-
-            while (edgeIter.hasNext()) {
-                DefaultEdge currentEdge = edgeIter.next();
-                Node<OWLDataProperty> dataPropertyNode = dataPropertyNodeHierarchy.getEdgeSource(currentEdge);
-                getSubDataPropsRecursively(dataPropertyNode, instances);
-            }
-
+        while (edgeIter.hasNext()) {
+            DefaultEdge currentEdge = edgeIter.next();
+            Node<OWLDataProperty> dataPropertyNode = dataPropertyNodeHierarchy.getEdgeSource(currentEdge);
+            getSubDataPropsRecursively(dataPropertyNode, instances);
         }
 
         return instances;
     }
 
     @Override
+    /**
+     * Method to get subObjectProperties of the given OWLObjectPropertyExpression.
+     * @param objectPropExpression
+     * 			The object property or property expresion in question
+     * @param direct
+     * 			If direct is true, return only the nodes one link away from the given expression.
+     * 			Else, return all sub object property expressions
+     * @return
+     */
     public NodeSet<OWLObjectPropertyExpression> getSubObjectProperties(OWLObjectPropertyExpression objectPropExpression, boolean direct) {
 
         OWLObjectPropertyNodeSet instances = new OWLObjectPropertyNodeSet();
@@ -770,27 +761,94 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
     }
 
     @Override
-    public NodeSet<OWLClass> getSuperClasses(OWLClassExpression arg0, boolean arg1) {
-        // TODO Auto-generated method stub
-        return null;
+    /**
+     * Gets the superclasses for a given class expression.
+     * If the class is not anonymous, we can just find its node and return the subclasses
+     * Else, we first reason over the ontology with the new class expression, and add it to
+     * the class hierarchy DAG, and then return the subclasses
+     * @param classExpr
+     * @param direct
+     * 			If direct is true, returns all subclasses. Else, returns subclasses directly pointing
+     * 			to the classExpr node
+     * @return
+     */
+    public NodeSet<OWLClass> getSuperClasses(OWLClassExpression classExpr, boolean direct) {
+    	OWLClassNodeSet instances = new OWLClassNodeSet();
+        DirectedAcyclicGraph<Node<OWLClass>, DefaultEdge> testGraph = classNodeHierarchy;
+
+        if (classExpr.isAnonymous()) {
+            OWLClass c = new OWLClassImpl(IRI.create("subsumptionTestIRI"));
+            OWLSubClassOfAxiom f = new OWLSubClassOfAxiomImpl(c, classExpr, new HashSet<OWLAnnotation>());
+            testGraph = new DirectedAcyclicGraph<>(DefaultEdge.class);
+            reasonClasses(f, testGraph);
+        }
+
+        // If it is not anonymous, it must be a class we already have
+        OWLClass owlclass = classExpr.asOWLClass();
+        Iterator<Node<OWLClass>> iter = testGraph.iterator();
+
+        while (iter.hasNext()) {
+        	Node<OWLClass> currentClassNode = iter.next();
+        	if (currentClassNode.contains(owlclass)) {
+        	
+        		//If direct, just get the nodes "directly" under this one
+            	if (direct) {
+                    Set<DefaultEdge> outgoingEdges = testGraph.outgoingEdgesOf(currentClassNode);
+
+                    for (DefaultEdge e : outgoingEdges) {
+                        Node<OWLClass> classNode = testGraph.getEdgeTarget(e);
+                        instances.addNode(classNode);
+                    }
+                }
+            	
+            	//If not direct, get all nodes under the current node recursively
+            	else {
+                	return getSuperClassesRecursively(currentClassNode, instances, testGraph);
+                }
+
+            }
+        }
+
+        return instances;
+    }
+    
+    /**
+     * Method to roll through and get super classes recursively
+     * @param currentNode
+     * @param instances
+     * @param graph
+     * @return
+     */
+    private NodeSet<OWLClass> getSuperClassesRecursively(Node<OWLClass> currentNode, OWLClassNodeSet instances, DirectedAcyclicGraph<Node<OWLClass>, DefaultEdge> graph) {
+    	if (!instances.containsEntity(currentNode.getRepresentativeElement())) {
+            instances.addNode(currentNode);
+        }
+
+        Set<DefaultEdge> outgoingEdges = graph.outgoingEdgesOf(currentNode);
+        Iterator<DefaultEdge> edgeIter = outgoingEdges.iterator();
+
+        while (edgeIter.hasNext()) {
+            DefaultEdge currentEdge = edgeIter.next();
+            Node<OWLClass> classNode = graph.getEdgeTarget(currentEdge);
+            getSuperClassesRecursively(classNode, instances, graph);
+        }
+
+        return instances;
     }
 
     @Override
     public NodeSet<OWLDataProperty> getSuperDataProperties(OWLDataProperty arg0, boolean arg1) {
-        // TODO Auto-generated method stub
-        return null;
+    	throw new DMTDoesNotSupportException("We don't perform reasoning on properties at this time");
     }
 
     @Override
     public NodeSet<OWLObjectPropertyExpression> getSuperObjectProperties(OWLObjectPropertyExpression arg0, boolean arg1) {
-        // TODO Auto-generated method stub
-        return null;
+    	throw new DMTDoesNotSupportException("We don't perform reasoning on properties at this time");
     }
 
     @Override
     public long getTimeOut() {
-        // TODO Auto-generated method stub
-        return 0;
+    	throw new DMTDoesNotSupportException("We don't perform timeout checking at this time");
     }
 
     /**
@@ -869,8 +927,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
 
     @Override
     public NodeSet<OWLClass> getTypes(OWLNamedIndividual arg0, boolean arg1) {
-        // TODO Auto-generated method stub
-        return null;
+    	throw new DMTDoesNotSupportException("We don't do reasoning over individuals at this time");
     }
 
     /**
@@ -885,7 +942,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
 
     @Override
     public void interrupt() {
-        // TODO Auto-generated method stub
+    	throw new DMTDoesNotSupportException("Reasoner cannot be interupted at this time");
     }
 
     /**
@@ -911,26 +968,22 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
 
     @Override
     public boolean isEntailed(OWLAxiom arg0) {
-        // TODO Auto-generated method stub
-        return false;
+    	throw new DMTDoesNotSupportException("Method not supported at this time");
     }
 
     @Override
     public boolean isEntailed(Set<? extends OWLAxiom> arg0) {
-        // TODO Auto-generated method stub
-        return false;
+    	throw new DMTDoesNotSupportException("Method not supported at this time");
     }
 
     @Override
     public boolean isEntailmentCheckingSupported(AxiomType<?> arg0) {
-        // TODO Auto-generated method stub
-        return false;
+    	return false;
     }
 
     @Override
     public boolean isPrecomputed(InferenceType arg0) {
-        // TODO Auto-generated method stub
-        return false;
+    	throw new DMTDoesNotSupportException("Method not supported at this time");
     }
 
     public boolean isSatisfiable(OWLClassExpression classExpr) {
@@ -966,8 +1019,8 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
                 subclasses.add(a.getSuperClass());
             }
         }
-        System.out.println("CLASS: " + c);
-        System.out.println("SUBCLASSES: " + subclasses);
+        //System.out.println("CLASS: " + c);
+        //System.out.println("SUBCLASSES: " + subclasses);
 
         return sat;
     }
@@ -1037,8 +1090,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
 
     @Override
     public void precomputeInferences(InferenceType... arg0) {
-        // TODO Auto-generated method stub
-
+        throw new DMTDoesNotSupportException("This method is not supported at this time");
     }
 
     @Override
@@ -1318,35 +1370,16 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
         	frame.getContentPane().add(gC);
         	frame.setVisible(true);
         }
+        
         return expressions;
     }
 
-    private void reasonProperties() {
-        throw new UnsupportedOperationException("Not supported yet."); // To
-        // change
-        // body
-        // of
-        // generated
-        // methods,
-        // choose
-        // Tools
-        // |
-        // Templates.
-    }
-
-    private void reasonDataproperties() {
-        throw new UnsupportedOperationException("Not supported yet."); // To
-        // change
-        // body
-        // of
-        // generated
-        // methods,
-        // choose
-        // Tools
-        // |
-        // Templates.
-    }
-
+    /**
+     * Method to build the DAG representing the class hierarchy
+     * @param hierarchy
+     * @param subsumptions
+     * @param classes
+     */
     private void buildClassDAG(DirectedAcyclicGraph<Node<OWLClass>, DefaultEdge> hierarchy, ArrayList<ArrayList<OWLClass>> subsumptions, ArrayList<OWLClass> classes) {
         hierarchy.addVertex(OWLClassNode.getTopNode());
         hierarchy.addVertex(OWLClassNode.getBottomNode());

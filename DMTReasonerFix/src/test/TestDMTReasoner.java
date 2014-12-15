@@ -107,20 +107,10 @@ public class TestDMTReasoner {
 		}
 
 		NodeSet<OWLClass> directSubclasses = reasoner.getSubClasses(father, true);
-		// System.out.println("Node set:" + directSubclasses);
 
 		// See if grandfather is the one and only class
-		if (directSubclasses.isSingleton()) {
-			for (Node<OWLClass> n : directSubclasses) {
-				if (n.contains(grandfather)) {
-					assertEquals(0, 0);
-					return;
-				}
-			}
-		}
-
-		// If it is not, fail the test
-		assertEquals(10, 11);
+		assertTrue(directSubclasses.isSingleton());
+		assertTrue(directSubclasses.containsEntity(grandfather));
 
 	}
 
@@ -133,8 +123,6 @@ public class TestDMTReasoner {
 		// Load .owl file and reason over it
 		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File(localDirectoryForOntologies + "evenMoreComplexParent.owl"));
 		OWLReasoner reasoner = new DMTReasonerFactory().createReasoner(ont3);
-		
-		System.out.println("reasoning?");
 
 		HashSet<OWLClass> classes = new HashSet<>();
 
@@ -144,7 +132,7 @@ public class TestDMTReasoner {
 		OWLClass grandfather = null;
 		OWLClass father = null;
 		OWLClass mother = null;
-		OWLClass nothing = null;
+		OWLClass nothing = new OWLClassImpl(IRI.create("http://www.w3.org/2002/07/owl#Nothing"));
 
 		Set<OWLAxiom> axioms = ont3.getAxioms();
 		for (OWLAxiom a : axioms) {
@@ -165,24 +153,18 @@ public class TestDMTReasoner {
 			if (c.getIRI().toString().endsWith("Grandfather")) {
 				grandfather = new OWLClassImpl(c.getIRI());
 			}
-			if (c.getIRI().toString().endsWith("father")) {
+			if (c.getIRI().toString().endsWith("Father")) {
 				father = new OWLClassImpl(c.getIRI());
 			}
-			if (c.getIRI().toString().endsWith("mother")) {
+			if (c.getIRI().toString().endsWith("Mother")) {
 				mother = new OWLClassImpl(c.getIRI());
 			}
-			if (c.getIRI().toString().endsWith("owl:Nothing")) {
-				nothing = new OWLClassImpl(c.getIRI());
-			}
-			System.out.println(c.getIRI().toString());
 		}
 
 		// If we didn't grab parent, fail the test
 		if (parent == null) {
-			System.out.println("null");
 			assertEquals("Parent is null", 0, 1);
 		}
-		
 
 		NodeSet<OWLClass> allSubclasses = reasoner.getSubClasses(parent, false);
 
@@ -194,6 +176,114 @@ public class TestDMTReasoner {
 		assertTrue(allSubclasses.containsEntity(father));
 		assertTrue(allSubclasses.containsEntity(mother));
 		assertTrue(allSubclasses.containsEntity(nothing));
+	}
+
+	@Test
+	/**
+	 * Now we want to test the other way, to see if father is a super class of grandfather
+	 */
+	public void fatherSuperclassOfGrandfather() throws Exception {
+
+		// Load .owl file and reason over it
+		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File(localDirectoryForOntologies + "evenMoreComplexParent.owl"));
+		OWLReasoner reasoner = new DMTReasonerFactory().createReasoner(ont3);
+
+		HashSet<OWLClass> classes = new HashSet<>();
+
+		OWLClass father = null;
+		OWLClass grandfather = null;
+
+		Set<OWLAxiom> axioms = ont3.getAxioms();
+		for (OWLAxiom a : axioms) {
+			classes.addAll(a.getClassesInSignature());
+		}
+
+		// Grab the father and grandfather classes
+		for (OWLClass c : classes) {
+			if (c.getIRI().toString().endsWith("Father")) {
+				father = new OWLClassImpl(c.getIRI());
+			}
+			if (c.getIRI().toString().endsWith("Grandfather")) {
+				grandfather = new OWLClassImpl(c.getIRI());
+			}
+		}
+
+		// If we didn't grab them, fail the test
+		if (father == null || grandfather == null) {
+			assertEquals("Father is null", 0, 1);
+		}
+
+		NodeSet<OWLClass> directSubclasses = reasoner.getSuperClasses(grandfather, true);
+
+		// See if father is a superclass of grandfather
+		assertTrue(directSubclasses.containsEntity(father));
+	}
+	
+	@Test
+	/**
+	 * Want to see if we can get all the superclasses of Grandmother.
+	 * @throws Exception
+	 */
+	public void allSuperclassesOfGrandmother() throws Exception {
+		// Load .owl file and reason over it
+		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File(localDirectoryForOntologies + "correctAndFinalParent.owl"));
+		OWLReasoner reasoner = new DMTReasonerFactory().createReasoner(ont3);
+
+		HashSet<OWLClass> classes = new HashSet<>();
+
+		OWLClass person = null;
+		OWLClass parent = null;
+		OWLClass grandparent = null;
+		OWLClass grandmother = null;
+		OWLClass mother = null;
+		OWLClass female = null;
+		OWLClass thing = new OWLClassImpl(IRI.create("http://www.w3.org/2002/07/owl#Thing"));
+
+		Set<OWLAxiom> axioms = ont3.getAxioms();
+		for (OWLAxiom a : axioms) {
+			classes.addAll(a.getClassesInSignature());
+		}
+
+		// Grab the classes we need
+		for (OWLClass c : classes) {
+			if (c.getIRI().toString().endsWith("Parent")) {
+				parent = new OWLClassImpl(c.getIRI());
+			}
+			if (c.getIRI().toString().endsWith("Person")) {
+				person = new OWLClassImpl(c.getIRI());
+			}
+			if (c.getIRI().toString().endsWith("Grandparent")) {
+				grandparent = new OWLClassImpl(c.getIRI());
+			}
+			if (c.getIRI().toString().endsWith("Grandmother")) {
+				grandmother = new OWLClassImpl(c.getIRI());
+			}
+			if (c.getIRI().toString().endsWith("Mother")) {
+				mother = new OWLClassImpl(c.getIRI());
+			}
+			if (c.getIRI().toString().endsWith("Female")) {
+				female = new OWLClassImpl(c.getIRI());
+			}
+		}
+
+		// If we didn't grab parent, fail the test
+		if (parent == null) {
+			assertEquals("Parent is null", 0, 1);
+		}
+
+		//Get all the superclasses of grandmother
+		NodeSet<OWLClass> allSuperclasses = reasoner.getSuperClasses(grandmother, false);
+		
+		System.out.println("ALLSUPP: " + allSuperclasses);
+
+		assertTrue(allSuperclasses.getFlattened().size() == 7);
+		assertTrue(allSuperclasses.containsEntity(person));
+		assertTrue(allSuperclasses.containsEntity(parent));
+		assertTrue(allSuperclasses.containsEntity(grandparent));
+		assertTrue(allSuperclasses.containsEntity(grandmother));
+		assertTrue(allSuperclasses.containsEntity(mother));
+		assertTrue(allSuperclasses.containsEntity(female));
+		assertTrue(allSuperclasses.containsEntity(thing));
 	}
 
 	@Test
@@ -215,7 +305,47 @@ public class TestDMTReasoner {
 		assertFalse("A ^ -A is unsatisfiale", reasoner.isSatisfiable(new OWLObjectIntersectionOfImpl(aIntersectNota)));
 	}
 
-	// @Test
+	@Test
+	/**
+	 * Test whether we can get disjoint classes
+	 */
+	public void testDisjoinClasses() throws Exception {
+		// Load .owl file and reason over it
+		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File(localDirectoryForOntologies + "evenMoreComplexParent.owl"));
+		OWLReasoner reasoner = new DMTReasonerFactory().createReasoner(ont3);
+
+		HashSet<OWLClass> classes = new HashSet<>();
+
+		OWLClass male = null;
+		OWLClass female = null;
+
+		Set<OWLAxiom> axioms = ont3.getAxioms();
+		for (OWLAxiom a : axioms) {
+			classes.addAll(a.getClassesInSignature());
+		}
+
+		// Grab the classes we need
+		for (OWLClass c : classes) {
+			if (c.getIRI().toString().endsWith("Male")) {
+				male = new OWLClassImpl(c.getIRI());
+			}
+			if (c.getIRI().toString().endsWith("Female")) {
+				female = new OWLClassImpl(c.getIRI());
+			}
+		}
+
+		// If we didn't grab male/female, fail the test
+		if (male == null || female == null) {
+			assertEquals("Parent is null", 0, 1);
+		}
+
+		OWLClassNodeSet disjointClassesFromMale = (OWLClassNodeSet) reasoner.getDisjointClasses(male);
+
+		// Make sure that male and female are disjoint
+		assertTrue(disjointClassesFromMale.containsEntity(female));
+	}
+
+	@Test
 	/**
 	 * Here we test whether A union -A is satisfiable
 	 */
@@ -232,6 +362,43 @@ public class TestDMTReasoner {
 		aIntersectNota.add(notA);
 
 		assertTrue("A union -A is unsatisfiale", reasoner.isSatisfiable(new OWLObjectUnionOfImpl(aIntersectNota)));
+	}
+	
+	//@Test
+	/**
+	 * Test if we can be bother a Grandmother and a Father
+	 */
+	public void testGrandmotherFatherSatisfiability() throws Exception {
+		// Load .owl file and reason over it
+		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File(localDirectoryForOntologies + "correctAndFinalParent.owl"));
+		OWLReasoner reasoner = new DMTReasonerFactory().createReasoner(ont3);
+		
+		HashSet<OWLClass> classes = new HashSet<>();
+
+		OWLClass father = null;
+		OWLClass grandmother = null;
+
+		Set<OWLAxiom> axioms = ont3.getAxioms();
+		for (OWLAxiom a : axioms) {
+			classes.addAll(a.getClassesInSignature());
+		}
+
+		// Grab the classes we need
+		for (OWLClass c : classes) {
+			if (c.getIRI().toString().endsWith("Father")) {
+				father = new OWLClassImpl(c.getIRI());
+			}
+			if (c.getIRI().toString().endsWith("Grandmother")) {
+				grandmother = new OWLClassImpl(c.getIRI());
+			}
+		}
+
+		HashSet<OWLClassExpression> intersection = new HashSet<OWLClassExpression>();
+
+		intersection.add(father);
+		intersection.add(grandmother);
+
+		assertFalse(reasoner.isSatisfiable(new OWLObjectIntersectionOfImpl(intersection)));
 	}
 
 	@Test
@@ -310,12 +477,12 @@ public class TestDMTReasoner {
 		assertTrue(equivalentClasses.contains(dad));
 		assertTrue(equivalentClasses.getSize() == 2);
 	}
-	
-	@Test
+
+	// @Test
 	public void chickenNuggetBenchmark() throws Exception {
 		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File(localDirectoryForOntologies + "MusicOntologySimplified.owl"));
 		OWLReasoner reasoner = new DMTReasonerFactory().createReasoner(ont3, true, true);
-		DMTReasoner dmtReasoner = (DMTReasoner)reasoner;
+		DMTReasoner dmtReasoner = (DMTReasoner) reasoner;
 		dmtReasoner.setShowGraph(true);
 		Thread.sleep(100000);
 	}

@@ -60,7 +60,7 @@ public class TestOntologyRead {
 		 * File("path to ontology"));
 		 */
 		OWLOntologyManager ontManager = OWLManager.createOWLOntologyManager();
-		OWLOntology ont = ontManager.loadOntologyFromOntologyDocument(new File("C:\\Users\\Keechwa\\Documents\\GitHub\\DMTReasoner\\DTMreasoner\\src\\test\\testOntology.owl"));
+		//OWLOntology ont = ontManager.loadOntologyFromOntologyDocument(new File("C:\\Users\\Keechwa\\Documents\\GitHub\\DMTReasoner\\DTMreasoner\\src\\test\\testOntology.owl"));
 		// OWLOntology ont2 = ontManager.loadOntologyFromOntologyDocument(new
 		// File("C:\\Users\\Keechwa\\Documents\\GitHub\\DMTReasoner\\DTMreasoner\\src\\test\\simpleParent.owl"));
 		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File("C:/Users/Matt/Desktop/FinalOntology/evenMoreComplexParent.owl"));
@@ -80,7 +80,7 @@ public class TestOntologyRead {
 			System.out.println(axiom.getClassesInSignature());
 			classes.addAll(axiom.getClassesInSignature());
 		}
-		OWLReasoner reasoner = new DMTReasonerFactory().createReasoner(ont3);
+		OWLReasoner reasoner = new DMTReasonerFactory().createReasoner(ont3, true, true);
 		HashSet<OWLClassExpression> union = new HashSet<>();
 		union.add(classes.toArray(new OWLClass[0])[2]);
 		union.add(classes.toArray(new OWLClass[0])[1]);
@@ -88,6 +88,57 @@ public class TestOntologyRead {
 		System.out.println(union);
 		// test();
 		//test2();
+		test3();
+	}
+	
+	public static void test3() throws Exception {
+		OWLOntologyManager ontManager = OWLManager.createOWLOntologyManager();
+		// Load .owl file and reason over it
+		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File("C:/Users/Matt/Desktop/FinalOntology/evenMoreComplexParent.owl"));
+		OWLReasoner reasoner = new DMTReasonerFactory().createReasoner(ont3);
+
+		HashSet<OWLClass> classes = new HashSet<>();
+
+		OWLClass parent = null;
+		OWLClass grandparent = null;
+		OWLClass grandmother = null;
+		OWLClass mother = null;
+		OWLClass female = null;
+		OWLClass thing = new OWLClassImpl(IRI.create("http://www.w3.org/2002/07/owl#Thing"));
+
+		Set<OWLAxiom> axioms = ont3.getAxioms();
+		for (OWLAxiom a : axioms) {
+			classes.addAll(a.getClassesInSignature());
+		}
+
+		// Grab the classes we need
+		for (OWLClass c : classes) {
+			if (c.getIRI().toString().endsWith("Parent")) {
+				parent = new OWLClassImpl(c.getIRI());
+			}
+			if (c.getIRI().toString().endsWith("Grandparent")) {
+				grandparent = new OWLClassImpl(c.getIRI());
+			}
+			if (c.getIRI().toString().endsWith("Grandmother")) {
+				grandmother = new OWLClassImpl(c.getIRI());
+			}
+			if (c.getIRI().toString().endsWith("Mother")) {
+				mother = new OWLClassImpl(c.getIRI());
+			}
+			if (c.getIRI().toString().endsWith("Female")) {
+				mother = new OWLClassImpl(c.getIRI());
+			}
+		}
+
+		// If we didn't grab parent, fail the test
+		if (parent == null) {
+			//assertEquals("Parent is null", 0, 1);
+		}
+
+		//Get all the superclasses of grandmother
+		NodeSet<OWLClass> allSuperclasses = reasoner.getSuperClasses(grandmother, false);
+		
+		System.out.println("ALLSUPP: " + allSuperclasses);
 	}
 
 	public static void test2() throws Exception{
