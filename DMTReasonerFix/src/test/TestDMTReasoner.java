@@ -35,23 +35,24 @@ import uk.ac.manchester.cs.owl.owlapi.OWLObjectIntersectionOfImpl;
 import uk.ac.manchester.cs.owl.owlapi.OWLObjectUnionOfImpl;
 
 /**
- * Class to test the DMTreasoner
- * NOTE: TO SEE THE DAG, RUN TestOntologyRead.java INSTEAD OF THESE JUNIT TESTS
+ * Class to test the DMTreasoner. This class was primarily used to test DAG
+ * query methods before the reasoner was implemented
  * 
  * @author Matt
  *
  */
 public class TestDMTReasoner {
-	
+
 	private OWLOntologyManager ontManager = OWLManager.createOWLOntologyManager();
-	
+
 	/**
-	 * Edit this to point to where the ontologies are stored on your local machine.
-	 * I'm not fancy/determined enough to link it to the github repo...
+	 * Edit this to point to where the ontologies are stored on your local
+	 * machine. I'm not fancy/determined enough to link it to the github repo...
 	 */
-	//private String localDirectoryForOntologies = "C:\\Users\\Keechwa\\Documents\\GitHub\\DMTReasonerFix\\DMTreasonerFix\\src\\test\\";
+	// private String localDirectoryForOntologies =
+	// "C:\\Users\\Keechwa\\Documents\\GitHub\\DMTReasonerFix\\DMTreasonerFix\\src\\test\\";
 	private String localDirectoryForOntologies = "C:/Users/Matt/Desktop/FinalOntology/";
-	
+
 	@Test
 	/**
 	 * Test whether our DAG is being built correctly in the simple case
@@ -59,10 +60,10 @@ public class TestDMTReasoner {
 	public void testGetBottomAndGetTopClassNode() throws Exception {
 		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File(localDirectoryForOntologies + "simpleParent.owl"));
 		OWLReasoner reasoner = new DMTReasonerFactory().createReasoner(ont3);
-		
+
 		OWLClass nothing = new OWLClassImpl(IRI.create("owl:Nothing"));
 		OWLClass thing = new OWLClassImpl(IRI.create("owl:Thing"));
-		
+
 		assertTrue(reasoner.getBottomClassNode().isBottomNode());
 		assertTrue(reasoner.getTopClassNode().isTopNode());
 	}
@@ -76,7 +77,7 @@ public class TestDMTReasoner {
 	 */
 	public void grandfatherSubClassOfFather() throws Exception {
 
-		//Load .owl file and reason over it
+		// Load .owl file and reason over it
 		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File(localDirectoryForOntologies + "evenMoreComplexParent.owl"));
 		OWLReasoner reasoner = new DMTReasonerFactory().createReasoner(ont3);
 
@@ -90,7 +91,7 @@ public class TestDMTReasoner {
 			classes.addAll(a.getClassesInSignature());
 		}
 
-		//Grab the father and grandfather classes
+		// Grab the father and grandfather classes
 		for (OWLClass c : classes) {
 			if (c.getIRI().toString().endsWith("Father")) {
 				father = new OWLClassImpl(c.getIRI());
@@ -100,18 +101,15 @@ public class TestDMTReasoner {
 			}
 		}
 
-		//If we didn't grab them, fail the test
+		// If we didn't grab them, fail the test
 		if (father == null || grandfather == null) {
 			assertEquals("Father is null", 0, 1);
 		}
 
 		NodeSet<OWLClass> directSubclasses = reasoner.getSubClasses(father, true);
-		//System.out.println("Node set:" + directSubclasses);
-		
-		System.out.println("Top: " + reasoner.getTopClassNode());
-		System.out.println("Bottom: " + reasoner.getBottomClassNode());
+		// System.out.println("Node set:" + directSubclasses);
 
-		//See if grandfather is the one and only class
+		// See if grandfather is the one and only class
 		if (directSubclasses.isSingleton()) {
 			for (Node<OWLClass> n : directSubclasses) {
 				if (n.contains(grandfather)) {
@@ -120,50 +118,122 @@ public class TestDMTReasoner {
 				}
 			}
 		}
-		
-		//If it is not, fail the test
+
+		// If it is not, fail the test
 		assertEquals(10, 11);
 
 	}
-	
+
+	@Test
+	/**
+	 * Test whether we can get all subclasses of the parent class
+	 */
+	public void allSubclassesOfParent() throws Exception {
+
+		// Load .owl file and reason over it
+		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File(localDirectoryForOntologies + "evenMoreComplexParent.owl"));
+		OWLReasoner reasoner = new DMTReasonerFactory().createReasoner(ont3);
+		
+		System.out.println("reasoning?");
+
+		HashSet<OWLClass> classes = new HashSet<>();
+
+		OWLClass parent = null;
+		OWLClass grandparent = null;
+		OWLClass grandmother = null;
+		OWLClass grandfather = null;
+		OWLClass father = null;
+		OWLClass mother = null;
+		OWLClass nothing = null;
+
+		Set<OWLAxiom> axioms = ont3.getAxioms();
+		for (OWLAxiom a : axioms) {
+			classes.addAll(a.getClassesInSignature());
+		}
+
+		// Grab the classes we need
+		for (OWLClass c : classes) {
+			if (c.getIRI().toString().endsWith("Parent")) {
+				parent = new OWLClassImpl(c.getIRI());
+			}
+			if (c.getIRI().toString().endsWith("Grandparent")) {
+				grandparent = new OWLClassImpl(c.getIRI());
+			}
+			if (c.getIRI().toString().endsWith("Grandmother")) {
+				grandmother = new OWLClassImpl(c.getIRI());
+			}
+			if (c.getIRI().toString().endsWith("Grandfather")) {
+				grandfather = new OWLClassImpl(c.getIRI());
+			}
+			if (c.getIRI().toString().endsWith("father")) {
+				father = new OWLClassImpl(c.getIRI());
+			}
+			if (c.getIRI().toString().endsWith("mother")) {
+				mother = new OWLClassImpl(c.getIRI());
+			}
+			if (c.getIRI().toString().endsWith("owl:Nothing")) {
+				nothing = new OWLClassImpl(c.getIRI());
+			}
+			System.out.println(c.getIRI().toString());
+		}
+
+		// If we didn't grab parent, fail the test
+		if (parent == null) {
+			System.out.println("null");
+			assertEquals("Parent is null", 0, 1);
+		}
+		
+
+		NodeSet<OWLClass> allSubclasses = reasoner.getSubClasses(parent, false);
+
+		assertTrue(allSubclasses.getFlattened().size() == 7);
+		assertTrue(allSubclasses.containsEntity(parent));
+		assertTrue(allSubclasses.containsEntity(grandparent));
+		assertTrue(allSubclasses.containsEntity(grandfather));
+		assertTrue(allSubclasses.containsEntity(grandmother));
+		assertTrue(allSubclasses.containsEntity(father));
+		assertTrue(allSubclasses.containsEntity(mother));
+		assertTrue(allSubclasses.containsEntity(nothing));
+	}
+
 	@Test
 	/**
 	 * Here we test whether A ^ -A is unsatisfiable
 	 */
 	public void testClassicUnsatisfiability() throws Exception {
-		//Load .owl file and reason over it
+		// Load .owl file and reason over it
 		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File(localDirectoryForOntologies + "evenMoreComplexParent.owl"));
 		OWLReasoner reasoner = new DMTReasonerFactory().createReasoner(ont3);
-		
+
 		HashSet<OWLClassExpression> aIntersectNota = new HashSet<OWLClassExpression>();
 		OWLClass a = new OWLClassImpl(IRI.create("A"));
 		OWLClassExpression notA = a.getComplementNNF();
-		
+
 		aIntersectNota.add(a);
 		aIntersectNota.add(notA);
-		
+
 		assertFalse("A ^ -A is unsatisfiale", reasoner.isSatisfiable(new OWLObjectIntersectionOfImpl(aIntersectNota)));
 	}
-	
-	//@Test
+
+	// @Test
 	/**
 	 * Here we test whether A union -A is satisfiable
 	 */
 	public void testClassicSatisfiability() throws Exception {
-		//Load .owl file and reason over it
+		// Load .owl file and reason over it
 		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File(localDirectoryForOntologies + "evenMoreComplexParent.owl"));
 		OWLReasoner reasoner = new DMTReasonerFactory().createReasoner(ont3);
-		
+
 		HashSet<OWLClassExpression> aIntersectNota = new HashSet<OWLClassExpression>();
 		OWLClass a = new OWLClassImpl(IRI.create("A"));
 		OWLClassExpression notA = a.getComplementNNF();
-		
+
 		aIntersectNota.add(a);
 		aIntersectNota.add(notA);
-		
+
 		assertTrue("A union -A is unsatisfiale", reasoner.isSatisfiable(new OWLObjectUnionOfImpl(aIntersectNota)));
 	}
-	
+
 	@Test
 	/**
 	 * In this case, we want to test some completeness of unions.
@@ -176,9 +246,9 @@ public class TestDMTReasoner {
 	public void testHasChildMaxCard() throws Exception {
 		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File(localDirectoryForOntologies + "moreComplexParentWithequivalentClasses.owl"));
 		OWLReasoner reasoner = new DMTReasonerFactory().createReasoner(ont3);
-		
+
 		Node<OWLClass> topNode = reasoner.getTopClassNode();
-		
+
 		HashSet<OWLClass> classes = new HashSet<>();
 
 		OWLClass person = null;
@@ -188,17 +258,17 @@ public class TestDMTReasoner {
 			classes.addAll(a.getClassesInSignature());
 		}
 
-		//Grab the Person class
+		// Grab the Person class
 		for (OWLClass c : classes) {
 			if (c.getIRI().toString().endsWith("Person")) {
 				person = new OWLClassImpl(c.getIRI());
 			}
 		}
-		
-		//Check it is in the right spot in the DAG
+
+		// Check it is in the right spot in the DAG
 		assertTrue(topNode.contains(person));
 	}
-	
+
 	@Test
 	/**
 	 * Here we want to test that Dad and Father are in the same node,
@@ -207,7 +277,7 @@ public class TestDMTReasoner {
 	public void testDadFatherEquivalence() throws Exception {
 		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File(localDirectoryForOntologies + "moreComplexParentWithequivalentClasses.owl"));
 		OWLReasoner reasoner = new DMTReasonerFactory().createReasoner(ont3);
-		
+
 		HashSet<OWLClass> classes = new HashSet<>();
 
 		OWLClass father = null;
@@ -218,7 +288,7 @@ public class TestDMTReasoner {
 			classes.addAll(a.getClassesInSignature());
 		}
 
-		//Grab the father and grandfather classes
+		// Grab the father and grandfather classes
 		for (OWLClass c : classes) {
 			if (c.getIRI().toString().endsWith("Father")) {
 				father = new OWLClassImpl(c.getIRI());
@@ -229,33 +299,43 @@ public class TestDMTReasoner {
 			}
 		}
 
-		//If we didn't grab them, fail the test
+		// If we didn't grab them, fail the test
 		if (father == null || dad == null) {
 			assertEquals("Father or dad is null", 0, 1);
 		}
 
 		Node<OWLClass> equivalentClasses = reasoner.getEquivalentClasses(father);
 
-		//See that dad is the one and only equivalent class
+		// See that dad is the one and only equivalent class
 		assertTrue(equivalentClasses.contains(dad));
 		assertTrue(equivalentClasses.getSize() == 2);
 	}
 	
-	//@Test
-	//This overflows the stack, infinite recursion issue
+	@Test
+	public void chickenNuggetBenchmark() throws Exception {
+		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File(localDirectoryForOntologies + "MusicOntologySimplified.owl"));
+		OWLReasoner reasoner = new DMTReasonerFactory().createReasoner(ont3, true, true);
+		DMTReasoner dmtReasoner = (DMTReasoner)reasoner;
+		dmtReasoner.setShowGraph(true);
+		Thread.sleep(100000);
+	}
+
+	// @Test
+	// This overflows the stack, infinite recursion issue
 	/**
-	 * Here we have a class UnsatisfiableMother, which, as you might have guessed, is unsatisfiable.
-	 * The definition is (hasChild max 0 Person) and Mother
-	 * But Mother is a subclass of Parent, which necessarily have children.
-	 * Thus, UnsatisfiableMother is indeed unsatisfiable
+	 * Here we have a class UnsatisfiableMother, which, as you might have
+	 * guessed, is unsatisfiable. The definition is (hasChild max 0 Person) and
+	 * Mother But Mother is a subclass of Parent, which necessarily have
+	 * children. Thus, UnsatisfiableMother is indeed unsatisfiable
+	 * 
 	 * @throws Exception
 	 */
 	public void testUnsatisfiableClass() throws Exception {
 		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File(localDirectoryForOntologies + "correctDefsCardinalityAndEquivalency.owl"));
 		OWLReasoner reasoner = new DMTReasonerFactory().createReasoner(ont3);
-		
+
 		Node<OWLClass> bottomNode = reasoner.getBottomClassNode();
-		
+
 		HashSet<OWLClass> classes = new HashSet<>();
 
 		OWLClass unsatMother = null;
@@ -265,29 +345,31 @@ public class TestDMTReasoner {
 			classes.addAll(a.getClassesInSignature());
 		}
 
-		//Grab the unsatMother class
+		// Grab the unsatMother class
 		for (OWLClass c : classes) {
 			if (c.getIRI().toString().endsWith("leMother")) {
 				unsatMother = new OWLClassImpl(c.getIRI());
 			}
 		}
-		
-		//Check it is in the right spot in the DAG
+
+		// Check it is in the right spot in the DAG
 		assertTrue(bottomNode.contains(unsatMother));
 	}
-	
-	//@Test
-	//This also causes an infinite loop, so unions are likely not the issue
+
+	// @Test
+	// This also causes an infinite loop, so unions are likely not the issue
 	/**
-	 * This is really just to see if unions were contributing to the problem of the previous method
+	 * This is really just to see if unions were contributing to the problem of
+	 * the previous method
+	 * 
 	 * @throws Exception
 	 */
 	public void testUnsatisfiableClassNoUnion() throws Exception {
 		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File(localDirectoryForOntologies + "noUnion.owl"));
 		OWLReasoner reasoner = new DMTReasonerFactory().createReasoner(ont3);
-		
+
 		Node<OWLClass> bottomNode = reasoner.getBottomClassNode();
-		
+
 		HashSet<OWLClass> classes = new HashSet<>();
 
 		OWLClass unsatMother = null;
@@ -297,14 +379,14 @@ public class TestDMTReasoner {
 			classes.addAll(a.getClassesInSignature());
 		}
 
-		//Grab the unsatMother class
+		// Grab the unsatMother class
 		for (OWLClass c : classes) {
 			if (c.getIRI().toString().endsWith("leMother")) {
 				unsatMother = new OWLClassImpl(c.getIRI());
 			}
 		}
-		
-		//Check it is in the right spot in the DAG
+
+		// Check it is in the right spot in the DAG
 		assertTrue(bottomNode.contains(unsatMother));
 	}
 }

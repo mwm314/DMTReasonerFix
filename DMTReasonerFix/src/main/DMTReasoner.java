@@ -81,9 +81,6 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
     // http://owlapi.sourceforge.net/javadoc/org/semanticweb/owlapi/reasoner/OWLReasoner.html
     private DirectedAcyclicGraph<Node<OWLClass>, DefaultEdge> classNodeHierarchy = new DirectedAcyclicGraph<>(DefaultEdge.class);
     private DirectedAcyclicGraph<Node<OWLDataProperty>, DefaultEdge> dataPropertyNodeHierarchy = new DirectedAcyclicGraph<>(DefaultEdge.class);
-    // I'm not sure why, but it seems as if this interface is conducive
-    // Node<OWLObjectPropertyExpression>, but I feel like they should be
-    // Node<OWLObjectProperty>.
     private DirectedAcyclicGraph<Node<OWLObjectPropertyExpression>, DefaultEdge> objectPropertyNodeHierarchy = new DirectedAcyclicGraph<>(DefaultEdge.class);
 
     // A NodeSet representing the individuals
@@ -99,56 +96,74 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
 
     // Given axioms from the ontology
     private Set<OWLAxiom> axioms;
+    
+    //If user wants to see text output of the hierarchy, specifiy the verbose option
+    private boolean verbose = false;
+    
+    //If user wants to see visual output of the class hierarchy, specify the showGraph option
+    private boolean showGraph = false;
 
     private ArrayList<OWLClass> classArray = new ArrayList<>();
     private ArrayList<ArrayList<Set<OWLSubClassOfAxiom>>> classDescriptions = new ArrayList<>();
     private ArrayList<Boolean> primitives = new ArrayList<>();
 
-    /*
-     * private OWLClassNode bottomClassNode = OWLClassNode.getBottomNode();
-     * private OWLDataPropertyNode bottomDataPropertyNode =
-     * OWLDataPropertyNode.getBottomNode(); private OWLObjectPropertyNode
-     * bottomObjectPropertyNode = OWLObjectPropertyNode.getBottomNode();
-     * 
-     * private OWLClassNode topClassNode = OWLClassNode.getTopNode(); private
-     * OWLDataPropertyNode topDataPropertyNode =
-     * OWLDataPropertyNode.getTopNode(); private OWLObjectPropertyNode
-     * topObjectPropertyNode = OWLObjectPropertyNode.getTopNode();
-     */
+    
     /**
      * Constructor for DMTReasoner
      */
-    public DMTReasoner(OWLOntology ontology) {
+    public DMTReasoner(OWLOntology ontology, boolean verbose, boolean showGraph) {
         this.ontology = ontology;
+        this.verbose = verbose;
+        this.showGraph = showGraph;
         axioms = ontology.getAxioms();
         reason();
     }
 
-    /*
-     * ONLY FOR TESTING. Get rid of this eventually.
+    /**
+     * ONLY FOR TESTING DAG METHODS
      */
     public DMTReasoner() {
     }
-
+    
+    /**
+     * ONLY FOR TESTING DAG METHODS
+     */
     public void setClassNodeHierarchy(DirectedAcyclicGraph<Node<OWLClass>, DefaultEdge> classNodeHierarchy) {
         this.classNodeHierarchy = classNodeHierarchy;
     }
 
+    /**
+     * ONLY FOR TESTING DAG METHODS
+     */
     public void setDataPropertyNodeHierarchy(DirectedAcyclicGraph<Node<OWLDataProperty>, DefaultEdge> dataPropertyNodeHierarchy) {
         this.dataPropertyNodeHierarchy = dataPropertyNodeHierarchy;
     }
 
+    /**
+     * ONLY FOR TESTING DAG METHODS
+     */
     public void setObjectPropertyNodeHierarchy(DirectedAcyclicGraph<Node<OWLObjectPropertyExpression>, DefaultEdge> objectPropertyNodeHierarchy) {
         this.objectPropertyNodeHierarchy = objectPropertyNodeHierarchy;
     }
-    	
-    public DirectedAcyclicGraph<Node<OWLClass>, DefaultEdge> getClassNodeHierarcy() {
-    	return this.classNodeHierarchy;
+    
+    /**
+     * Set this to true if you want to see console output
+     * @param verbose
+     */
+    public void setVerbose(boolean verbose) {
+    	this.verbose = verbose;
+    }
+    
+    /**
+     * Set this to true if you want to see the visualization of the DAG
+     * @param showGraph
+     */
+    public void setShowGraph(boolean showGraph) {
+    	this.showGraph = showGraph;
     }
 
     public void dispose() {
-        // TODO Auto-generated method stub
-
+    	throw new DMTDoesNotSupportException("No dispose() method");
     }
 
     @Override
@@ -162,13 +177,13 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
         reason();
     }
 
+    @Override
     /**
      * Returns the bottom class node from our classNodeHierarchy. This node is
      * the node without any incoming edges
      *
      * @return
      */
-    @Override
     public Node<OWLClass> getBottomClassNode() {
         Iterator<Node<OWLClass>> iter = classNodeHierarchy.iterator();
         while (iter.hasNext()) {
@@ -184,11 +199,11 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
         return null;
     }
 
+    @Override
     /**
      * Returns the bottom data property node from our dataPropertyNodeHierarchy
      * This node is the node without any incoming edges
      */
-    @Override
     public Node<OWLDataProperty> getBottomDataPropertyNode() {
         Iterator<Node<OWLDataProperty>> iter = dataPropertyNodeHierarchy.iterator();
         while (iter.hasNext()) {
@@ -207,12 +222,12 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
         return null;
     }
 
+    @Override
     /**
      * Returns the bottom data property node from our
      * objectPropertyNodeHierarchy This node is the node without any incoming
      * edges
      */
-    @Override
     public Node<OWLObjectPropertyExpression> getBottomObjectPropertyNode() {
         // Should this return Node<OWLObjectProperty>?! Confusing...
         Iterator<Node<OWLObjectPropertyExpression>> iter = objectPropertyNodeHierarchy.iterator();
@@ -233,22 +248,26 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
     }
 
     @Override
+    /**
+     * Return the bufferingMode. In our case,
+     * we do buffer, so axioms can be updated programmatically
+     * @return
+     */
     public BufferingMode getBufferingMode() {
         return bufferingMode;
     }
 
     @Override
     public NodeSet<OWLClass> getDataPropertyDomains(OWLDataProperty dataProperty, boolean arg1) {
-        // TODO Auto-generated method stub
-        return null;
+        throw new DMTDoesNotSupportException("Reasoning over properties not supported");
     }
 
     @Override
     public Set<OWLLiteral> getDataPropertyValues(OWLNamedIndividual individual, OWLDataProperty dataProperty) {
-        // TODO Auto-generated method stub
-        return null;
+    	throw new DMTDoesNotSupportException("Reasoning over properties not supported");
     }
 
+    @Override
     /**
      * Individuals are represented by the individuals node set. We return the
      * NodeSet of all individual Nodes except for the node with the given
@@ -258,7 +277,6 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
      * @param individual
      * @return
      */
-    @Override
     public NodeSet<OWLNamedIndividual> getDifferentIndividuals(OWLNamedIndividual individual) {
         Iterator<Node<OWLNamedIndividual>> iter = individuals.iterator();
         OWLNamedIndividualNodeSet instances = new OWLNamedIndividualNodeSet();
@@ -531,6 +549,17 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
     }
 
     @Override
+    /**
+     * Gets the subclasses for a given class expression.
+     * If the class is not anonymous, we can just find its node and return the subclasses
+     * Else, we first reason over the ontology with the new class expression, and add it to
+     * the class hierarchy DAG, and then return the subclasses
+     * @param classExpr
+     * @param direct
+     * 			If direct is true, returns all subclasses. Else, returns subclasses directly pointing
+     * 			to the classExpr node
+     * @return
+     */
     public NodeSet<OWLClass> getSubClasses(OWLClassExpression classExpr, boolean direct) {
 
         OWLClassNodeSet instances = new OWLClassNodeSet();
@@ -548,11 +577,11 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
         Iterator<Node<OWLClass>> iter = testGraph.iterator();
 
         while (iter.hasNext()) {
-            if (direct) {
-
-                Node<OWLClass> currentClassNode = iter.next();
-
-                if (currentClassNode.contains(owlclass)) {
+        	Node<OWLClass> currentClassNode = iter.next();
+        	if (currentClassNode.contains(owlclass)) {
+        	
+        		//If direct, just get the nodes "directly" under this one
+            	if (direct) {
                     Set<DefaultEdge> incomingEdges = testGraph.incomingEdgesOf(currentClassNode);
 
                     for (DefaultEdge e : incomingEdges) {
@@ -560,20 +589,39 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
                         instances.addNode(classNode);
                     }
                 }
+            	
+            	//If not direct, get all nodes under the current node recursively
+            	else {
+                	return getSubClassesRecursively(currentClassNode, instances, testGraph);
+                }
 
             }
         }
 
         return instances;
+    }
+    
+    /**
+     * Recursive helper method to assist in getting all subclasses of a given node
+     */
+    private OWLClassNodeSet getSubClassesRecursively(Node<OWLClass> currentNode, OWLClassNodeSet instances, DirectedAcyclicGraph<Node<OWLClass>, DefaultEdge> graph) {
 
-        /*
-         * while (iter.hasNext()) { Node<OWLClass> currentClassNode =
-         * iter.next(); if (currentClassNode.contains(owlclass)) {
-         * instances.addNode(currentClassNode); } }
-         */
-        /*
-         * System.out.println("RETURNING NULL."); return null;
-         */
+        if (!instances.containsEntity(currentNode.getRepresentativeElement())) {
+            instances.addNode(currentNode);
+        }
+
+        Iterator<Node<OWLClass>> iter = graph.iterator();
+
+        Set<DefaultEdge> incomingEdges = graph.incomingEdgesOf(currentNode);
+        Iterator<DefaultEdge> edgeIter = incomingEdges.iterator();
+
+        while (edgeIter.hasNext()) {
+            DefaultEdge currentEdge = edgeIter.next();
+            Node<OWLClass> classNode = graph.getEdgeSource(currentEdge);
+            getSubClassesRecursively(classNode, instances, graph);
+        }
+
+        return instances;
     }
 
     /**
@@ -1245,7 +1293,7 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
         Hashtable<OWLClass, Set<OWLSubClassOfAxiom>> expressions = new Hashtable<>();
 
         for (int i = 0; i < classArray.size(); i++) {
-            if (true) {
+            if (verbose) {
                 System.out.println("CLASS: " + classArray.get(i));
                 System.out.println("SUBCLASSES: " + subsumptions.get(i));
                 System.out.println("FACTS: " + classDescriptions.get(i).get(0));
@@ -1254,20 +1302,22 @@ public class DMTReasoner implements OWLReasoner, OWLOntologyChangeListener {
         }
         if (hierarchy != null) {
             buildClassDAG(hierarchy, subsumptions, classArray);
-            System.out.println(hierarchy);
         }
-        JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1600, 800);
-        mxGraph graph = (new JGraphXAdapter(hierarchy));
-        mxHierarchicalLayout layout = new mxHierarchicalLayout(graph);
-        //set all properties
+        
+        if (showGraph) {
+        	JFrame frame = new JFrame();
+        	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        	frame.setSize(1600, 800);
+        	mxGraph graph = (new JGraphXAdapter(hierarchy));
+        	mxHierarchicalLayout layout = new mxHierarchicalLayout(graph);
+        	//set all properties
 
-        //layout graph
-        layout.execute(graph.getDefaultParent());
-        mxGraphComponent gC = new mxGraphComponent(graph);
-        frame.getContentPane().add(gC);
-        frame.setVisible(true);
+        	//layout graph
+        	layout.execute(graph.getDefaultParent());
+        	mxGraphComponent gC = new mxGraphComponent(graph);
+        	frame.getContentPane().add(gC);
+        	frame.setVisible(true);
+        }
         return expressions;
     }
 

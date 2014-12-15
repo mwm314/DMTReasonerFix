@@ -6,36 +6,48 @@ import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
 
 
 public class DMTReasonerFactory implements OWLReasonerFactory {
+	
 
 	@Override
 	public OWLReasoner createNonBufferingReasoner(OWLOntology ontology) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new DMTDoesNotSupportException("We only deal with buffering reasoners");
 	}
 
 	@Override
 	public OWLReasoner createNonBufferingReasoner(OWLOntology ontology,
 			OWLReasonerConfiguration config) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new DMTDoesNotSupportException("We only deal with buffering reasoners");
 	}
 
 	@Override
 	public OWLReasoner createReasoner(OWLOntology ontology) {
-		return new DMTReasoner(ontology);
+		return new DMTReasoner(ontology, false, false);
+	}
+	
+	/**
+	 * Constructor to call if output to console desired or DAG visual desired
+	 * @param ontology
+	 * 			The ontology in question
+	 * @param verbose
+	 * 			Parameter to display text output to console
+	 * @param showGraph
+	 * 			Parameter to call and create a JFrame to display the DAG
+	 * @return
+	 */
+	public OWLReasoner createReasoner(OWLOntology ontology, boolean verbose, boolean showGraph) {
+		return new DMTReasoner(ontology, verbose, showGraph);
 	}
 
 	@Override
 	public OWLReasoner createReasoner(OWLOntology ontology,
 			OWLReasonerConfiguration config) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new DMTDoesNotSupportException("We do not handle configurations at this time");
 	}
 
+	@Override
 	/**
 	 * Returns the name of the reasoner
 	 */
-	@Override
 	public String getReasonerName() {
 		return "Dan,Matt,Tyler ALHFN reasoner";
 	}

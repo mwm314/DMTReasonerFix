@@ -14,6 +14,7 @@ import uk.ac.manchester.cs.owl.owlapi.*;
 
 /**
  * Unit tests for testing the DAG structure
+ * These were written before the reasoner was functional to test some of the querying methods.
  * @author Matt
  *
  */

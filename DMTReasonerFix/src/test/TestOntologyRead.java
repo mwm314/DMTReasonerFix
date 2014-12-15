@@ -1,10 +1,14 @@
 package test;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.File;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+
 import main.*;
+
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.AxiomType;
 import org.semanticweb.owlapi.model.IRI;
@@ -21,7 +25,9 @@ import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.model.OWLObjectSomeValuesFrom;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.reasoner.NodeSet;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
+
 import uk.ac.manchester.cs.owl.owlapi.OWLClassImpl;
 import uk.ac.manchester.cs.owl.owlapi.OWLDataFactoryImpl;
 import uk.ac.manchester.cs.owl.owlapi.OWLDataPropertyImpl;
@@ -54,10 +60,10 @@ public class TestOntologyRead {
 		 * File("path to ontology"));
 		 */
 		OWLOntologyManager ontManager = OWLManager.createOWLOntologyManager();
-		//OWLOntology ont = ontManager.loadOntologyFromOntologyDocument(new File("C:\\Users\\Keechwa\\Documents\\GitHub\\DMTReasoner\\DTMreasoner\\src\\test\\testOntology.owl"));
+		OWLOntology ont = ontManager.loadOntologyFromOntologyDocument(new File("C:\\Users\\Keechwa\\Documents\\GitHub\\DMTReasoner\\DTMreasoner\\src\\test\\testOntology.owl"));
 		// OWLOntology ont2 = ontManager.loadOntologyFromOntologyDocument(new
 		// File("C:\\Users\\Keechwa\\Documents\\GitHub\\DMTReasoner\\DTMreasoner\\src\\test\\simpleParent.owl"));
-		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File("C:/Users/Matt/Desktop/FinalOntology/ChickenNuggetPackage.owl"));
+		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File("C:/Users/Matt/Desktop/FinalOntology/evenMoreComplexParent.owl"));
 		Set<OWLAxiom> axioms = ont3.getAxioms();
 		
 		Iterator<OWLAxiom> iter = axioms.iterator();
@@ -81,14 +87,46 @@ public class TestOntologyRead {
 		System.out.println(reasoner.isSatisfiable(new OWLObjectIntersectionOfImpl(union)));
 		System.out.println(union);
 		// test();
-		// test2();
+		//test2();
 	}
 
-	public static void test2() {
-		OWLClassExpression male = new OWLClassImpl(IRI.create("Male"));
-		OWLObjectPropertyExpression hasChild = new OWLObjectPropertyImpl(IRI.create("hasChild"));
-		OWLObjectSomeValuesFrom test = new OWLObjectSomeValuesFromImpl(hasChild, male);
-		OWLClassExpression maleNeg = male.getComplementNNF();
+	public static void test2() throws Exception{
+		OWLOntologyManager ontManager = OWLManager.createOWLOntologyManager();
+		OWLOntology ont3 = ontManager.loadOntologyFromOntologyDocument(new File("C:/Users/Matt/Desktop/FinalOntology/evenMoreComplexParent.owl"));
+		OWLReasoner reasoner = new DMTReasonerFactory().createReasoner(ont3);
+		
+		System.out.println("reasoning?");
+
+		HashSet<OWLClass> classes = new HashSet<>();
+
+		OWLClass parent = null;
+
+		Set<OWLAxiom> axioms = ont3.getAxioms();
+		for (OWLAxiom a : axioms) {
+			classes.addAll(a.getClassesInSignature());
+		}
+
+		// Grab the father and grandfather classes
+		for (OWLClass c : classes) {
+			if (c.getIRI().toString().endsWith("Parent")) {
+				parent = new OWLClassImpl(c.getIRI());
+			}
+		}
+		
+		System.out.println("TEST");
+
+		// If we didn't grab them, fail the test
+		if (parent == null) {
+			System.out.println("null");
+			assertEquals("Parent is null", 0, 1);
+		}
+		
+		System.out.println("before");
+
+		NodeSet<OWLClass> allSubclasses = reasoner.getSubClasses(parent, false);
+		
+		System.out.println("PRINTING:");
+		System.out.println("ALL SUBCLASSES: " + allSubclasses);
 	}
 
 	public static void test() {

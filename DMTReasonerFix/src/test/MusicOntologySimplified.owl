@@ -3,69 +3,19 @@
 
 <!DOCTYPE rdf:RDF [
     <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
-    <!ENTITY swrl "http://www.w3.org/2003/11/swrl#" >
-    <!ENTITY swrlb "http://www.w3.org/2003/11/swrlb#" >
     <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
     <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
     <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
-    <!ENTITY MTD "http://www.semanticweb.org/CSE428/Proj1/MTD#" >
 ]>
 
 
-<rdf:RDF xmlns="http://www.w3.org/2002/07/owl#"
-     xml:base="http://www.w3.org/2002/07/owl"
+<rdf:RDF xmlns="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#"
+     xml:base="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-     xmlns:swrl="http://www.w3.org/2003/11/swrl#"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-     xmlns:swrlb="http://www.w3.org/2003/11/swrlb#"
-     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-     xmlns:MTD="http://www.semanticweb.org/CSE428/Proj1/MTD#">
-    <Ontology rdf:about="http://www.semanticweb.org/CSE428/Proj1/MTD">
-        <imports rdf:resource="http://www.semanticweb.org/CSE428/Proj1/MTD"/>
-    </Ontology>
-    
-
-
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Annotation properties
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
-
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#compositionYear -->
-
-    <AnnotationProperty rdf:about="&MTD;compositionYear"/>
-    
-
-
-    <!-- http://www.w3.org/2002/07/owl#sameAs -->
-
-    <AnnotationProperty rdf:about="&owl;sameAs"/>
-    
-
-
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Datatypes
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
-
-    
-
-
-    <!-- http://www.w3.org/2001/XMLSchema#dateTime -->
-
-    <rdf:Description rdf:about="&xsd;dateTime">
-        <equivalentClass rdf:resource="&xsd;dateTime"/>
-    </rdf:Description>
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69"/>
     
 
 
@@ -80,367 +30,9 @@
     
 
 
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#coMember -->
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#hasMember -->
 
-    <ObjectProperty rdf:about="&MTD;coMember">
-        <rdf:type rdf:resource="&owl;SymmetricProperty"/>
-        <rdfs:comment>If two personnel have performed together with the same ensemble, then they are considered comemebers.</rdfs:comment>
-    </ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#composed -->
-
-    <ObjectProperty rdf:about="&MTD;composed">
-        <rdf:type rdf:resource="&owl;AsymmetricProperty"/>
-        <rdf:type rdf:resource="&owl;IrreflexiveProperty"/>
-        <rdfs:comment>If two people are comembers, they have played in some Ensemble together</rdfs:comment>
-    </ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#conducted -->
-
-    <ObjectProperty rdf:about="&MTD;conducted">
-        <rdf:type rdf:resource="&owl;AsymmetricProperty"/>
-        <rdf:type rdf:resource="&owl;IrreflexiveProperty"/>
-        <rdfs:comment>The conductor conducted</rdfs:comment>
-    </ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#conductedBy -->
-
-    <ObjectProperty rdf:about="&MTD;conductedBy">
-        <rdf:type rdf:resource="&owl;AsymmetricProperty"/>
-        <rdf:type rdf:resource="&owl;IrreflexiveProperty"/>
-        <rdfs:comment>The recording is conducted by</rdfs:comment>
-    </ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#featuredInRelease -->
-
-    <ObjectProperty rdf:about="&MTD;featuredInRelease">
-        <rdfs:comment>An ensemble is featured in some release</rdfs:comment>
-    </ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#fromPeriod -->
-
-    <ObjectProperty rdf:about="&MTD;fromPeriod">
-        <rdf:type rdf:resource="&owl;AsymmetricProperty"/>
-        <rdf:type rdf:resource="&owl;IrreflexiveProperty"/>
-        <rdfs:comment>Denotes that a composition, personnel, or release is from some musical period</rdfs:comment>
-    </ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#hasComposer -->
-
-    <ObjectProperty rdf:about="&MTD;hasComposer">
-        <rdf:type rdf:resource="&owl;AsymmetricProperty"/>
-        <rdf:type rdf:resource="&owl;IrreflexiveProperty"/>
-        <rdfs:comment>A piece has a composer</rdfs:comment>
-    </ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#hasEnsemble -->
-
-    <ObjectProperty rdf:about="&MTD;hasEnsemble">
-        <rdf:type rdf:resource="&owl;AsymmetricProperty"/>
-        <rdf:type rdf:resource="&owl;IrreflexiveProperty"/>
-        <rdfs:comment>A release has some ensemble playing it</rdfs:comment>
-    </ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#hasInstrument -->
-
-    <ObjectProperty rdf:about="&MTD;hasInstrument">
-        <rdf:type rdf:resource="&owl;AsymmetricProperty"/>
-        <rdf:type rdf:resource="&owl;IrreflexiveProperty"/>
-        <rdfs:comment>An instrumentation contains instruments</rdfs:comment>
-    </ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#hasInstrumentation -->
-
-    <ObjectProperty rdf:about="&MTD;hasInstrumentation">
-        <rdf:type rdf:resource="&owl;AsymmetricProperty"/>
-        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-        <rdf:type rdf:resource="&owl;IrreflexiveProperty"/>
-        <rdfs:comment>A composition has some instrumentation</rdfs:comment>
-    </ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#hasMember -->
-
-    <ObjectProperty rdf:about="&MTD;hasMember">
-        <rdfs:comment>An ensemble contains personnel</rdfs:comment>
-    </ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#hasPastMember -->
-
-    <ObjectProperty rdf:about="&MTD;hasPastMember">
-        <rdfs:comment>Denotes a previous member of an ensemble</rdfs:comment>
-    </ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#hasPlayed -->
-
-    <ObjectProperty rdf:about="&MTD;hasPlayed">
-        <rdfs:comment>An Ensemble or Personnel plays a composition</rdfs:comment>
-    </ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#hasPublisher -->
-
-    <ObjectProperty rdf:about="&MTD;hasPublisher">
-        <rdfs:comment>A release may have a publisher</rdfs:comment>
-    </ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#hasRecording -->
-
-    <ObjectProperty rdf:about="&MTD;hasRecording">
-        <rdfs:comment>A composition may have a recording</rdfs:comment>
-    </ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#instrumentPlayedBy -->
-
-    <ObjectProperty rdf:about="&MTD;instrumentPlayedBy">
-        <rdfs:comment>A class of instruments is played by certain performers</rdfs:comment>
-    </ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#memberOf -->
-
-    <ObjectProperty rdf:about="&MTD;memberOf">
-        <rdfs:comment>A person can be a member of an Ensemble</rdfs:comment>
-    </ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#pastMemberOf -->
-
-    <ObjectProperty rdf:about="&MTD;pastMemberOf">
-        <rdfs:comment>Denotes a personnel is a retired member of an ensemble</rdfs:comment>
-    </ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#performedBy -->
-
-    <ObjectProperty rdf:about="&MTD;performedBy">
-        <rdfs:comment>An instrument is performed by some person</rdfs:comment>
-    </ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#performsOn -->
-
-    <ObjectProperty rdf:about="&MTD;performsOn">
-        <rdfs:comment>A person performs on some instrument</rdfs:comment>
-    </ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#periodAfter -->
-
-    <ObjectProperty rdf:about="&MTD;periodAfter">
-        <rdf:type rdf:resource="&owl;TransitiveProperty"/>
-        <rdfs:comment xml:lang="en">Notation A periodAfter B means A is a period after B</rdfs:comment>
-    </ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#periodBefore -->
-
-    <ObjectProperty rdf:about="&MTD;periodBefore">
-        <rdf:type rdf:resource="&owl;TransitiveProperty"/>
-        <rdfs:comment xml:lang="en">Notation A periodBefore B means A is a period before B</rdfs:comment>
-    </ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#playedBy -->
-
-    <ObjectProperty rdf:about="&MTD;playedBy">
-        <rdfs:comment>A composition is played by an ensemble or personnel</rdfs:comment>
-    </ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#playsInstrument -->
-
-    <ObjectProperty rdf:about="&MTD;playsInstrument">
-        <rdfs:comment>Signifies what instrument class a performer can play</rdfs:comment>
-    </ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#published -->
-
-    <ObjectProperty rdf:about="&MTD;published">
-        <rdfs:comment>A publisher can publish a release</rdfs:comment>
-    </ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#recordingOf -->
-
-    <ObjectProperty rdf:about="&MTD;recordingOf">
-        <rdfs:comment>A release can have a recording of a composition</rdfs:comment>
-    </ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#sings -->
-
-    <ObjectProperty rdf:about="&MTD;sings">
-        <rdfs:comment>A vocalist sings a voice</rdfs:comment>
-    </ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#sungBy -->
-
-    <ObjectProperty rdf:about="&MTD;sungBy">
-        <rdf:type rdf:resource="&owl;AsymmetricProperty"/>
-        <rdf:type rdf:resource="&owl;IrreflexiveProperty"/>
-        <rdfs:comment>A voice is sung by a vocalist</rdfs:comment>
-        <rdfs:subPropertyOf rdf:resource="&MTD;instrumentPlayedBy"/>
-    </ObjectProperty>
-    
-
-
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Data properties
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
-
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#compositionYear -->
-
-    <DatatypeProperty rdf:about="&MTD;compositionYear"/>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#ensembleFoundationDate -->
-
-    <DatatypeProperty rdf:about="&MTD;ensembleFoundationDate">
-        <rdfs:comment>The date an ensemble was founded</rdfs:comment>
-    </DatatypeProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#hasCompositionName -->
-
-    <DatatypeProperty rdf:about="&MTD;hasCompositionName"/>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#hasEnsembleName -->
-
-    <DatatypeProperty rdf:about="&MTD;hasEnsembleName"/>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#hasName -->
-
-    <DatatypeProperty rdf:about="&MTD;hasName"/>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#hasPersonnelName -->
-
-    <DatatypeProperty rdf:about="&MTD;hasPersonnelName"/>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#hasPublisherName -->
-
-    <DatatypeProperty rdf:about="&MTD;hasPublisherName"/>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#hasReleaseName -->
-
-    <DatatypeProperty rdf:about="&MTD;hasReleaseName">
-        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-    </DatatypeProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#opusBWVNumber -->
-
-    <DatatypeProperty rdf:about="&MTD;opusBWVNumber"/>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#opusKöchelNumber -->
-
-    <DatatypeProperty rdf:about="&MTD;opusKöchelNumber"/>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#opusNumber -->
-
-    <DatatypeProperty rdf:about="&MTD;opusNumber"/>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#periodEnd -->
-
-    <DatatypeProperty rdf:about="&MTD;periodEnd"/>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#periodStart -->
-
-    <DatatypeProperty rdf:about="&MTD;periodStart"/>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#personnelBorn -->
-
-    <DatatypeProperty rdf:about="&MTD;personnelBorn">
-        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-    </DatatypeProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#personnelDied -->
-
-    <DatatypeProperty rdf:about="&MTD;personnelDied">
-        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-    </DatatypeProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#releaseYear -->
-
-    <DatatypeProperty rdf:about="&MTD;releaseYear">
-        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-    </DatatypeProperty>
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#hasMember"/>
     
 
 
@@ -455,1430 +47,172 @@
     
 
 
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Alto -->
-
-    <Class rdf:about="&MTD;Alto">
-        <rdfs:subClassOf rdf:resource="&MTD;Voice"/>
-        <rdfs:comment>Alto voice</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#AltoSax -->
-
-    <Class rdf:about="&MTD;AltoSax">
-        <rdfs:label>Alto Sax</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;Saxophone"/>
-        <rdfs:comment>Class defining alto saxophones</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#AtypicalInstrument -->
-
-    <Class rdf:about="&MTD;AtypicalInstrument">
-        <rdfs:label>Atypical Instrument</rdfs:label>
-        <equivalentClass>
-            <Class>
-                <intersectionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="&MTD;Instrument"/>
-                    <Class>
-                        <complementOf>
-                            <Class>
-                                <unionOf rdf:parseType="Collection">
-                                    <rdf:Description rdf:about="&MTD;PercussionInstrument"/>
-                                    <rdf:Description rdf:about="&MTD;StringInstrument"/>
-                                    <rdf:Description rdf:about="&MTD;Voice"/>
-                                    <rdf:Description rdf:about="&MTD;WindInstrument"/>
-                                </unionOf>
-                            </Class>
-                        </complementOf>
-                    </Class>
-                </intersectionOf>
-            </Class>
-        </equivalentClass>
-        <rdfs:subClassOf rdf:resource="&MTD;Instrument"/>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Auxiliary -->
-
-    <Class rdf:about="&MTD;Auxiliary">
-        <rdfs:subClassOf rdf:resource="&MTD;PercussionInstrument"/>
-        <rdfs:comment>A class representing Auxillary Percussion instruments</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#BariSax -->
-
-    <Class rdf:about="&MTD;BariSax">
-        <rdfs:label>Baritone Sax</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;Saxophone"/>
-        <rdfs:comment>Class defining baritone saxaphones</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Baritone -->
-
-    <Class rdf:about="&MTD;Baritone">
-        <rdfs:subClassOf rdf:resource="&MTD;Voice"/>
-        <rdfs:comment>Baritone Voice</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Bass -->
-
-    <Class rdf:about="&MTD;Bass">
-        <rdfs:subClassOf rdf:resource="&MTD;Voice"/>
-        <rdfs:comment>Bass Voice</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#BassDrum -->
-
-    <Class rdf:about="&MTD;BassDrum">
-        <rdfs:label>Bass Drum</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;Drum"/>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#BassTrombone -->
-
-    <Class rdf:about="&MTD;BassTrombone">
-        <rdfs:label>Bass Trombone</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;Trombone"/>
-        <disjointWith rdf:resource="&MTD;TenorTrombone"/>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Bassoon -->
-
-    <Class rdf:about="&MTD;Bassoon">
-        <rdfs:label>Bassoon</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;DoubleReed"/>
-        <rdfs:comment>The class representing Bassoons</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#BrassInstrument -->
-
-    <Class rdf:about="&MTD;BrassInstrument">
-        <rdfs:label>Brass Instrument
-</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;WindInstrument"/>
-        <disjointWith rdf:resource="&MTD;WoodWindInstrument"/>
-        <rdfs:comment>Class representing brass instruments</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Celesta -->
-
-    <Class rdf:about="&MTD;Celesta">
-        <rdfs:subClassOf rdf:resource="&MTD;Keyboard"/>
-        <rdfs:comment>A class representing the Celesta</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Cello -->
-
-    <Class rdf:about="&MTD;Cello">
-        <rdfs:label>Cello</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;StringInstrument"/>
-        <rdfs:comment>A class representhing the Cello</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Clarinet -->
-
-    <Class rdf:about="&MTD;Clarinet">
-        <rdfs:label>Clarinet</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;SingleReed"/>
-        <disjointWith rdf:resource="&MTD;Saxophone"/>
-        <rdfs:comment>The class representing clarinets</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#ClassicalOrchestra -->
-
-    <Class rdf:about="&MTD;ClassicalOrchestra">
-        <equivalentClass>
-            <Class>
-                <intersectionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="&MTD;Instrumentation"/>
-                    <Restriction>
-                        <onProperty rdf:resource="&MTD;hasInstrument"/>
-                        <onClass rdf:resource="&MTD;Instrument"/>
-                        <minQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">11</minQualifiedCardinality>
-                    </Restriction>
-                </intersectionOf>
-            </Class>
-        </equivalentClass>
-        <rdfs:subClassOf rdf:resource="&MTD;Instrumentation"/>
-        <rdfs:comment>An orchestra.</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Composer -->
-
-    <Class rdf:about="&MTD;Composer">
-        <rdfs:subClassOf>
-            <Class>
-                <intersectionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="&MTD;Personnel"/>
-                    <Restriction>
-                        <onProperty rdf:resource="&MTD;composed"/>
-                        <someValuesFrom rdf:resource="&MTD;Composition"/>
-                    </Restriction>
-                </intersectionOf>
-            </Class>
-        </rdfs:subClassOf>
-        <rdfs:comment>Someone who writes compositions</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Composition -->
-
-    <Class rdf:about="&MTD;Composition">
-        <rdfs:subClassOf>
-            <Restriction>
-                <onProperty rdf:resource="&MTD;hasComposer"/>
-                <someValuesFrom rdf:resource="&MTD;Composer"/>
-            </Restriction>
-        </rdfs:subClassOf>
-        <rdfs:comment>A musical composition, composed of voices and notes</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Conductor -->
-
-    <Class rdf:about="&MTD;Conductor">
-        <equivalentClass>
-            <Restriction>
-                <onProperty rdf:resource="&MTD;conducted"/>
-                <someValuesFrom>
-                    <Class>
-                        <unionOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="&MTD;Ensemble"/>
-                            <rdf:Description rdf:about="&MTD;Release"/>
-                        </unionOf>
-                    </Class>
-                </someValuesFrom>
-            </Restriction>
-        </equivalentClass>
-        <rdfs:subClassOf rdf:resource="&MTD;Performer"/>
-        <rdfs:comment>The conductor of an ensemble or release</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Contralto -->
-
-    <Class rdf:about="&MTD;Contralto">
-        <rdfs:subClassOf rdf:resource="&MTD;Voice"/>
-        <rdfs:comment>Contralto voice</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#CorAnglais -->
-
-    <Class rdf:about="&MTD;CorAnglais">
-        <rdfs:label>English Horn</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;DoubleReed"/>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Cornet -->
-
-    <Class rdf:about="&MTD;Cornet">
-        <rdfs:subClassOf rdf:resource="&MTD;Trumpet"/>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#CounterTenor -->
-
-    <Class rdf:about="&MTD;CounterTenor">
-        <rdfs:subClassOf rdf:resource="&MTD;Voice"/>
-        <rdfs:comment>CounterTenor voice</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Cymbals -->
-
-    <Class rdf:about="&MTD;Cymbals">
-        <rdfs:label>Cymbals</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;Auxiliary"/>
-        <rdfs:comment>The class representing cymbals</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#DoubleBass -->
-
-    <Class rdf:about="&MTD;DoubleBass">
-        <rdfs:label>Double Bass</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;StringInstrument"/>
-        <rdfs:comment>Class representing a String Bass</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#DoubleReed -->
-
-    <Class rdf:about="&MTD;DoubleReed">
-        <rdfs:label>Double Reed</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;WoodWindInstrument"/>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Drum -->
-
-    <Class rdf:about="&MTD;Drum">
-        <rdfs:subClassOf rdf:resource="&MTD;PercussionInstrument"/>
-        <rdfs:comment>A class representing drums</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Duet -->
-
-    <Class rdf:about="&MTD;Duet">
-        <equivalentClass>
-            <Class>
-                <intersectionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="&MTD;Instrumentation"/>
-                    <Restriction>
-                        <onProperty rdf:resource="&MTD;hasInstrument"/>
-                        <onClass rdf:resource="&MTD;Instrument"/>
-                        <qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">2</qualifiedCardinality>
-                    </Restriction>
-                </intersectionOf>
-            </Class>
-        </equivalentClass>
-        <rdfs:subClassOf rdf:resource="&MTD;Instrumentation"/>
-        <rdfs:comment>A duet, with two instruments</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Ensemble -->
-
-    <Class rdf:about="&MTD;Ensemble">
-        <rdfs:subClassOf>
-            <Restriction>
-                <onProperty rdf:resource="&MTD;hasMember"/>
-                <someValuesFrom rdf:resource="&MTD;Personnel"/>
-            </Restriction>
-        </rdfs:subClassOf>
-        <rdfs:comment>An Ensemble, which is a musical group</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Euphonium -->
-
-    <Class rdf:about="&MTD;Euphonium">
-        <rdfs:subClassOf rdf:resource="&MTD;BrassInstrument"/>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Flute -->
-
-    <Class rdf:about="&MTD;Flute">
-        <rdfs:label>Flute</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;Flutes"/>
-        <disjointWith rdf:resource="&MTD;Piccolo"/>
-        <rdfs:comment>The class representing flutes</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Flutes -->
-
-    <Class rdf:about="&MTD;Flutes">
-        <rdfs:subClassOf rdf:resource="&MTD;WoodWindInstrument"/>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#FrenchHorn -->
-
-    <Class rdf:about="&MTD;FrenchHorn">
-        <rdfs:label>French Horn</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;BrassInstrument"/>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Glockenspiele -->
-
-    <Class rdf:about="&MTD;Glockenspiele">
-        <rdfs:subClassOf rdf:resource="&MTD;Keyboard"/>
-        <rdfs:comment>A class representing the Glockenspiele</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Harp -->
-
-    <Class rdf:about="&MTD;Harp">
-        <rdfs:subClassOf rdf:resource="&MTD;StringInstrument"/>
-        <rdfs:comment>A class representing Harps</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Harpsichord -->
-
-    <Class rdf:about="&MTD;Harpsichord">
-        <rdfs:subClassOf rdf:resource="&MTD;Keyboard"/>
-        <rdfs:comment>A class representing the Harpsichord, which is similar to a Piano.</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Instrument -->
-
-    <Class rdf:about="&MTD;Instrument">
-        <rdfs:label>Instrument</rdfs:label>
-        <rdfs:comment>The Class of all Instruments</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Instrumentalist -->
-
-    <Class rdf:about="&MTD;Instrumentalist">
-        <equivalentClass>
-            <Class>
-                <intersectionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="&MTD;Performer"/>
-                    <Restriction>
-                        <onProperty rdf:resource="&MTD;playsInstrument"/>
-                        <someValuesFrom rdf:resource="&MTD;Instrument"/>
-                    </Restriction>
-                </intersectionOf>
-            </Class>
-        </equivalentClass>
-        <rdfs:comment>Someone who plays an instrument</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Instrumentation -->
-
-    <Class rdf:about="&MTD;Instrumentation">
-        <rdfs:label>Instrumentation</rdfs:label>
-        <rdfs:subClassOf>
-            <Restriction>
-                <onProperty rdf:resource="&MTD;hasInstrument"/>
-                <allValuesFrom rdf:resource="&MTD;Instrument"/>
-            </Restriction>
-        </rdfs:subClassOf>
-        <rdfs:comment>A class defining ensembles, such as duets, trios, quartets, and orchestras.</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Keyboard -->
-
-    <Class rdf:about="&MTD;Keyboard">
-        <rdfs:subClassOf rdf:resource="&MTD;PercussionInstrument"/>
-        <rdfs:comment>A class representing keyboards, which we are considering as percussion instruments, not string instruments. They are typically found in the percussion/rythm section.</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#MezzoSoprano -->
-
-    <Class rdf:about="&MTD;MezzoSoprano">
-        <rdfs:label>Mezzo-soprano</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;Voice"/>
-        <rdfs:comment>Mezzo Soprano Voice</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Oboe -->
-
-    <Class rdf:about="&MTD;Oboe">
-        <rdfs:label>Oboe</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;DoubleReed"/>
-        <rdfs:comment>The class representing Oboes</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Organ -->
-
-    <Class rdf:about="&MTD;Organ">
-        <rdfs:subClassOf rdf:resource="&MTD;Keyboard"/>
-        <rdfs:comment>A class representing an organ.</rdfs:comment>
-        <sameAs></sameAs>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#PercussionInstrument -->
-
-    <Class rdf:about="&MTD;PercussionInstrument">
-        <rdfs:label>Percussion Instrument</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;Instrument"/>
-        <rdfs:comment>The class of all percussion instruments, including piano</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Performer -->
-
-    <Class rdf:about="&MTD;Performer">
-        <rdfs:subClassOf rdf:resource="&MTD;Personnel"/>
-        <rdfs:comment>Anyone who performs on a stage.</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Period -->
-
-    <Class rdf:about="&MTD;Period">
-        <equivalentClass>
-            <Class>
-                <oneOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="&MTD;RomanticPeriod"/>
-                    <rdf:Description rdf:about="&MTD;RenaissancePeriod"/>
-                    <rdf:Description rdf:about="&MTD;ClassicalPeriod"/>
-                    <rdf:Description rdf:about="&MTD;ContemporaryPeriod"/>
-                    <rdf:Description rdf:about="&MTD;MedivalPeriod"/>
-                    <rdf:Description rdf:about="&MTD;ModernPeriod"/>
-                    <rdf:Description rdf:about="&MTD;BaroquePeriod"/>
-                </oneOf>
-            </Class>
-        </equivalentClass>
-        <rdfs:subClassOf>
-            <Restriction>
-                <onProperty rdf:resource="&MTD;periodStart"/>
-                <someValuesFrom rdf:resource="&xsd;int"/>
-            </Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <Restriction>
-                <onProperty rdf:resource="&MTD;periodEnd"/>
-                <someValuesFrom rdf:resource="&xsd;int"/>
-            </Restriction>
-        </rdfs:subClassOf>
-        <rdfs:comment>A class defining musical periods</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Personnel -->
-
-    <Class rdf:about="&MTD;Personnel">
-        <rdfs:subClassOf>
-            <Restriction>
-                <onProperty rdf:resource="&MTD;personnelDied"/>
-                <someValuesFrom rdf:resource="&xsd;int"/>
-            </Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <Restriction>
-                <onProperty rdf:resource="&MTD;personnelBorn"/>
-                <someValuesFrom rdf:resource="&xsd;int"/>
-            </Restriction>
-        </rdfs:subClassOf>
-        <rdfs:comment>A class defining types of Musical Persons</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Piano -->
-
-    <Class rdf:about="&MTD;Piano">
-        <rdfs:label>Piano</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;Keyboard"/>
-        <sameAs></sameAs>
-        <rdfs:comment>The class representing pianos</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Piccolo -->
-
-    <Class rdf:about="&MTD;Piccolo">
-        <rdfs:label>Piccolo</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;Flutes"/>
-        <rdfs:comment>The class representing piccolos</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Publisher -->
-
-    <Class rdf:about="&MTD;Publisher">
-        <rdfs:subClassOf>
-            <Restriction>
-                <onProperty rdf:resource="&MTD;published"/>
-                <someValuesFrom rdf:resource="&MTD;Release"/>
-            </Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <Restriction>
-                <onProperty rdf:resource="&MTD;hasPublisherName"/>
-                <someValuesFrom rdf:resource="&xsd;string"/>
-            </Restriction>
-        </rdfs:subClassOf>
-        <rdfs:comment>A class defining publishers</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Quartet -->
-
-    <Class rdf:about="&MTD;Quartet">
-        <equivalentClass>
-            <Class>
-                <intersectionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="&MTD;Instrumentation"/>
-                    <Restriction>
-                        <onProperty rdf:resource="&MTD;hasInstrument"/>
-                        <onClass rdf:resource="&MTD;Instrument"/>
-                        <qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">4</qualifiedCardinality>
-                    </Restriction>
-                </intersectionOf>
-            </Class>
-        </equivalentClass>
-        <rdfs:subClassOf rdf:resource="&MTD;Instrumentation"/>
-        <rdfs:comment>A quartet, with 4 instruments</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Quintet -->
-
-    <Class rdf:about="&MTD;Quintet">
-        <equivalentClass>
-            <Class>
-                <intersectionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="&MTD;Instrumentation"/>
-                    <Restriction>
-                        <onProperty rdf:resource="&MTD;hasInstrument"/>
-                        <onClass rdf:resource="&MTD;Instrument"/>
-                        <qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">5</qualifiedCardinality>
-                    </Restriction>
-                </intersectionOf>
-            </Class>
-        </equivalentClass>
-        <rdfs:subClassOf rdf:resource="&MTD;Instrumentation"/>
-        <rdfs:comment>Quintets have exactly 5 reasons. This restriction isn&apos;t stated because it takes the reasoner too long to compute with this restriction.</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Release -->
-
-    <Class rdf:about="&MTD;Release">
-        <rdfs:subClassOf>
-            <Restriction>
-                <onProperty rdf:resource="&MTD;releaseYear"/>
-                <someValuesFrom rdf:resource="&xsd;int"/>
-            </Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <Restriction>
-                <onProperty rdf:resource="&MTD;hasPublisher"/>
-                <someValuesFrom rdf:resource="&MTD;Publisher"/>
-            </Restriction>
-        </rdfs:subClassOf>
-        <rdfs:comment>A class defining a release</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Saxophone -->
-
-    <Class rdf:about="&MTD;Saxophone">
-        <rdfs:label>Saxophone</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;SingleReed"/>
-        <rdfs:comment>The class representing saxophones</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Sextet -->
-
-    <Class rdf:about="&MTD;Sextet">
-        <equivalentClass>
-            <Class>
-                <intersectionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="&MTD;Instrumentation"/>
-                    <Restriction>
-                        <onProperty rdf:resource="&MTD;hasInstrument"/>
-                        <onClass rdf:resource="&MTD;Instrument"/>
-                        <qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">6</qualifiedCardinality>
-                    </Restriction>
-                </intersectionOf>
-            </Class>
-        </equivalentClass>
-        <rdfs:subClassOf rdf:resource="&MTD;Instrumentation"/>
-        <rdfs:comment>A sextet has 6 instruments. This restriction isn&apos;t stated because it takes the reasoner too long to compute.</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#SingleReed -->
-
-    <Class rdf:about="&MTD;SingleReed">
-        <rdfs:label>Single Reed</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;WoodWindInstrument"/>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#SnareDrum -->
-
-    <Class rdf:about="&MTD;SnareDrum">
-        <rdfs:label>Snare Drum</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;Drum"/>
-        <rdfs:comment>The class representing snare drums</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Solo -->
-
-    <Class rdf:about="&MTD;Solo">
-        <equivalentClass>
-            <Class>
-                <intersectionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="&MTD;Instrumentation"/>
-                    <Restriction>
-                        <onProperty rdf:resource="&MTD;hasInstrument"/>
-                        <onClass rdf:resource="&MTD;Instrument"/>
-                        <qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</qualifiedCardinality>
-                    </Restriction>
-                </intersectionOf>
-            </Class>
-        </equivalentClass>
-        <rdfs:comment>A solo instrumentation. Has exactly 1 instrument.</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Soprano -->
-
-    <Class rdf:about="&MTD;Soprano">
-        <rdfs:subClassOf rdf:resource="&MTD;Voice"/>
-        <rdfs:comment>Soprano Voice</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#StringInstrument -->
-
-    <Class rdf:about="&MTD;StringInstrument">
-        <rdfs:label>String Instrument</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;Instrument"/>
-        <rdfs:comment>The class of what people typically call &quot;String&quot; Instruments</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Tambourine -->
-
-    <Class rdf:about="&MTD;Tambourine">
-        <rdfs:subClassOf rdf:resource="&MTD;Auxiliary"/>
-        <rdfs:comment>The class representing Tambourines</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Tenor -->
-
-    <Class rdf:about="&MTD;Tenor">
-        <rdfs:subClassOf rdf:resource="&MTD;Voice"/>
-        <rdfs:comment>Tenor voice</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#TenorSax -->
-
-    <Class rdf:about="&MTD;TenorSax">
-        <rdfs:label>Tenor Sax</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;Saxophone"/>
-        <rdfs:comment>Class describing tenor saxophones</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#TenorTrombone -->
-
-    <Class rdf:about="&MTD;TenorTrombone">
-        <rdfs:label>Tenor Trombone</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;Trombone"/>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Timpani -->
-
-    <Class rdf:about="&MTD;Timpani">
-        <rdfs:label>Timpani</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;Drum"/>
-        <rdfs:comment>The class representing timpani</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Triangle -->
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Decet -->
 
-    <Class rdf:about="&MTD;Triangle">
-        <rdfs:subClassOf rdf:resource="&MTD;Auxiliary"/>
-        <rdfs:comment>The class representing the Triangle</rdfs:comment>
-    </Class>
+    <owl:Class rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Decet">
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#hasMember"/>
+                <owl:onClass rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Decet"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">10</owl:qualifiedCardinality>
+            </owl:Restriction>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Instrumentation"/>
+    </owl:Class>
     
 
 
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Trio -->
-
-    <Class rdf:about="&MTD;Trio">
-        <equivalentClass>
-            <Class>
-                <intersectionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="&MTD;Instrumentation"/>
-                    <Restriction>
-                        <onProperty rdf:resource="&MTD;hasInstrument"/>
-                        <onClass rdf:resource="&MTD;Instrument"/>
-                        <qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">3</qualifiedCardinality>
-                    </Restriction>
-                </intersectionOf>
-            </Class>
-        </equivalentClass>
-        <rdfs:comment>Class representing a Trio, must have 3 Performers</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Trombone -->
-
-    <Class rdf:about="&MTD;Trombone">
-        <rdfs:label>Trombone</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;BrassInstrument"/>
-        <rdfs:comment>Class representing trombones</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Trumpet -->
-
-    <Class rdf:about="&MTD;Trumpet">
-        <rdfs:subClassOf rdf:resource="&MTD;BrassInstrument"/>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Tuba -->
-
-    <Class rdf:about="&MTD;Tuba">
-        <rdfs:label>Tuba</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;BrassInstrument"/>
-        <rdfs:comment>Class representing tubas</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Vibraphone -->
-
-    <Class rdf:about="&MTD;Vibraphone">
-        <rdfs:subClassOf rdf:resource="&MTD;Keyboard"/>
-        <rdfs:comment>A class representing a Vibraphone.</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Viola -->
-
-    <Class rdf:about="&MTD;Viola">
-        <rdfs:label>Viola</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;StringInstrument"/>
-        <rdfs:comment>A class representing violas</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Violin -->
-
-    <Class rdf:about="&MTD;Violin">
-        <rdfs:label>Violin</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;StringInstrument"/>
-        <rdfs:comment>A class representing violins</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Vocalist -->
-
-    <Class rdf:about="&MTD;Vocalist">
-        <equivalentClass>
-            <Class>
-                <intersectionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="&MTD;Performer"/>
-                    <Restriction>
-                        <onProperty rdf:resource="&MTD;sings"/>
-                        <someValuesFrom rdf:resource="&MTD;Voice"/>
-                    </Restriction>
-                </intersectionOf>
-            </Class>
-        </equivalentClass>
-        <rdfs:comment>Someone who sings a voice</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Voice -->
-
-    <Class rdf:about="&MTD;Voice">
-        <rdfs:label>Voice Part</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;Instrument"/>
-        <rdfs:comment>A class containing all voice parts</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#WindInstrument -->
-
-    <Class rdf:about="&MTD;WindInstrument">
-        <rdfs:label>Wind Instrument</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;Instrument"/>
-        <rdfs:comment>The class of all Wind instruments, including Brass and Woodwind</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#WoodWindInstrument -->
-
-    <Class rdf:about="&MTD;WoodWindInstrument">
-        <rdfs:label>Woodwind Instrument</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;WindInstrument"/>
-        <rdfs:comment>The class representing wood wind instruments</rdfs:comment>
-    </Class>
-    
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Duet -->
 
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#Xylophone -->
-
-    <Class rdf:about="&MTD;Xylophone">
-        <rdfs:subClassOf rdf:resource="&MTD;Keyboard"/>
-        <rdfs:comment>A class representing the Xylophone.</rdfs:comment>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#bassClarinet -->
-
-    <Class rdf:about="&MTD;bassClarinet">
-        <rdfs:label>Bass Clarinet</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;Clarinet"/>
-        <disjointWith rdf:resource="&MTD;sopranoClarinet"/>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#sopranoClarinet -->
-
-    <Class rdf:about="&MTD;sopranoClarinet">
-        <rdfs:label>Bb Clarinet</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;Clarinet"/>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#sopranoSaxophone -->
-
-    <Class rdf:about="&MTD;sopranoSaxophone">
-        <rdfs:label>Soprano Sax</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;Saxophone"/>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#tamTam -->
-
-    <Class rdf:about="&MTD;tamTam">
-        <rdfs:label>Tam-tam</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;Drum"/>
-    </Class>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#wagnerTuba -->
-
-    <Class rdf:about="&MTD;wagnerTuba">
-        <rdfs:label>Wagner Tuba</rdfs:label>
-        <rdfs:subClassOf rdf:resource="&MTD;Tuba"/>
-    </Class>
-    
-
-
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Individuals
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
-
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#20thCenturyPeriod -->
-
-    <NamedIndividual rdf:about="&MTD;20thCenturyPeriod">
-        <rdf:type rdf:resource="&MTD;Period"/>
-        <MTD:periodStart rdf:datatype="&xsd;integer">1901</MTD:periodStart>
-        <MTD:periodEnd rdf:datatype="&xsd;integer">2000</MTD:periodEnd>
-        <rdfs:comment>Year 1901 - 2000</rdfs:comment>
-        <MTD:periodBefore rdf:resource="&MTD;ContemporaryPeriod"/>
-        <MTD:periodAfter rdf:resource="&MTD;RomanticPeriod"/>
-    </NamedIndividual>
+    <owl:Class rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Duet">
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#hasMember"/>
+                <owl:onClass rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Duet"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">2</owl:qualifiedCardinality>
+            </owl:Restriction>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Instrumentation"/>
+    </owl:Class>
     
 
 
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#BaroquePeriod -->
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Instrumentation -->
 
-    <NamedIndividual rdf:about="&MTD;BaroquePeriod">
-        <rdf:type rdf:resource="&MTD;Period"/>
-        <MTD:periodStart rdf:datatype="&xsd;integer">1600</MTD:periodStart>
-        <MTD:periodEnd rdf:datatype="&xsd;integer">1760</MTD:periodEnd>
-        <rdfs:comment>Year 1600-1760</rdfs:comment>
-        <MTD:periodBefore rdf:resource="&MTD;ClassicalPeriod"/>
-    </NamedIndividual>
+    <owl:Class rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Instrumentation">
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#hasMember"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Performer"/>
+            </owl:Restriction>
+        </owl:equivalentClass>
+    </owl:Class>
     
 
 
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#ClassicalPeriod -->
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Nonet -->
 
-    <NamedIndividual rdf:about="&MTD;ClassicalPeriod">
-        <rdf:type rdf:resource="&MTD;Period"/>
-        <MTD:periodStart rdf:datatype="&xsd;integer">1730</MTD:periodStart>
-        <MTD:periodEnd rdf:datatype="&xsd;integer">1820</MTD:periodEnd>
-        <rdfs:comment>Year 1730 - 1820</rdfs:comment>
-        <MTD:periodBefore rdf:resource="&MTD;RomanticPeriod"/>
-    </NamedIndividual>
+    <owl:Class rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Nonet">
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#hasMember"/>
+                <owl:onClass rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Nonet"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">9</owl:qualifiedCardinality>
+            </owl:Restriction>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Instrumentation"/>
+    </owl:Class>
     
 
 
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#ContemporaryPeriod -->
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Octet -->
 
-    <NamedIndividual rdf:about="&MTD;ContemporaryPeriod">
-        <rdf:type rdf:resource="&MTD;Period"/>
-        <MTD:periodStart rdf:datatype="&xsd;integer">1975</MTD:periodStart>
-        <rdfs:comment>Year 1975 - now</rdfs:comment>
-        <MTD:periodAfter rdf:resource="&MTD;ModernPeriod"/>
-    </NamedIndividual>
+    <owl:Class rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Octet">
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#hasMember"/>
+                <owl:onClass rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Performer"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">8</owl:qualifiedCardinality>
+            </owl:Restriction>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Instrumentation"/>
+    </owl:Class>
     
 
 
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#MedivalPeriod -->
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Performer -->
 
-    <NamedIndividual rdf:about="&MTD;MedivalPeriod">
-        <rdf:type rdf:resource="&MTD;Period"/>
-        <MTD:periodEnd rdf:datatype="&xsd;integer">1400</MTD:periodEnd>
-        <MTD:periodStart rdf:datatype="&xsd;integer">500</MTD:periodStart>
-        <rdfs:comment>Year 500 - 1400</rdfs:comment>
-        <MTD:periodBefore rdf:resource="&MTD;RenaissancePeriod"/>
-    </NamedIndividual>
+    <owl:Class rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Performer"/>
     
 
 
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#ModernPeriod -->
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Quartet -->
 
-    <NamedIndividual rdf:about="&MTD;ModernPeriod">
-        <rdf:type rdf:resource="&MTD;Period"/>
-        <MTD:periodStart rdf:datatype="&xsd;integer">1890</MTD:periodStart>
-        <MTD:periodEnd rdf:datatype="&xsd;integer">1930</MTD:periodEnd>
-        <rdfs:comment>Years 1890 - 1930</rdfs:comment>
-        <MTD:periodBefore rdf:resource="&MTD;ContemporaryPeriod"/>
-    </NamedIndividual>
+    <owl:Class rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Quartet">
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#hasMember"/>
+                <owl:onClass rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Quartet"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">4</owl:qualifiedCardinality>
+            </owl:Restriction>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Instrumentation"/>
+    </owl:Class>
     
 
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#RenaissancePeriod -->
-
-    <NamedIndividual rdf:about="&MTD;RenaissancePeriod">
-        <rdf:type rdf:resource="&MTD;Period"/>
-        <MTD:periodStart rdf:datatype="&xsd;integer">1400</MTD:periodStart>
-        <MTD:periodEnd rdf:datatype="&xsd;integer">1600</MTD:periodEnd>
-        <rdfs:comment>Year 1400-1600</rdfs:comment>
-        <MTD:periodBefore rdf:resource="&MTD;BaroquePeriod"/>
-    </NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/CSE428/Proj1/MTD#RomanticPeriod -->
-
-    <NamedIndividual rdf:about="&MTD;RomanticPeriod">
-        <rdf:type rdf:resource="&MTD;Period"/>
-        <MTD:periodStart rdf:datatype="&xsd;integer">1815</MTD:periodStart>
-        <MTD:periodEnd rdf:datatype="&xsd;integer">1910</MTD:periodEnd>
-        <rdfs:comment>Year 1815-1910</rdfs:comment>
-        <MTD:periodBefore rdf:resource="&MTD;ModernPeriod"/>
-    </NamedIndividual>
-    
-
-
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // General axioms
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
-
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
-        <members rdf:parseType="Collection">
-            <rdf:Description rdf:about="&MTD;Cello"/>
-            <rdf:Description rdf:about="&MTD;DoubleBass"/>
-            <rdf:Description rdf:about="&MTD;Harp"/>
-            <rdf:Description rdf:about="&MTD;Viola"/>
-            <rdf:Description rdf:about="&MTD;Violin"/>
-        </members>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
-        <members rdf:parseType="Collection">
-            <rdf:Description rdf:about="&MTD;Alto"/>
-            <rdf:Description rdf:about="&MTD;Baritone"/>
-            <rdf:Description rdf:about="&MTD;Bass"/>
-            <rdf:Description rdf:about="&MTD;Contralto"/>
-            <rdf:Description rdf:about="&MTD;CounterTenor"/>
-            <rdf:Description rdf:about="&MTD;MezzoSoprano"/>
-            <rdf:Description rdf:about="&MTD;Soprano"/>
-            <rdf:Description rdf:about="&MTD;Tenor"/>
-        </members>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
-        <members rdf:parseType="Collection">
-            <rdf:Description rdf:about="&MTD;Celesta"/>
-            <rdf:Description rdf:about="&MTD;Glockenspiele"/>
-            <rdf:Description rdf:about="&MTD;Harpsichord"/>
-            <rdf:Description rdf:about="&MTD;Piano"/>
-            <rdf:Description rdf:about="&MTD;Vibraphone"/>
-            <rdf:Description rdf:about="&MTD;Xylophone"/>
-        </members>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
-        <members rdf:parseType="Collection">
-            <rdf:Description rdf:about="&MTD;AltoSax"/>
-            <rdf:Description rdf:about="&MTD;BariSax"/>
-            <rdf:Description rdf:about="&MTD;TenorSax"/>
-            <rdf:Description rdf:about="&MTD;sopranoSaxophone"/>
-        </members>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
-        <members rdf:parseType="Collection">
-            <rdf:Description rdf:about="&MTD;Cymbals"/>
-            <rdf:Description rdf:about="&MTD;Tambourine"/>
-            <rdf:Description rdf:about="&MTD;Triangle"/>
-        </members>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
-        <members rdf:parseType="Collection">
-            <rdf:Description rdf:about="&MTD;Bassoon"/>
-            <rdf:Description rdf:about="&MTD;CorAnglais"/>
-            <rdf:Description rdf:about="&MTD;Oboe"/>
-        </members>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
-        <members rdf:parseType="Collection">
-            <rdf:Description rdf:about="&MTD;DoubleReed"/>
-            <rdf:Description rdf:about="&MTD;Flutes"/>
-            <rdf:Description rdf:about="&MTD;SingleReed"/>
-        </members>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
-        <members rdf:parseType="Collection">
-            <rdf:Description rdf:about="&MTD;PercussionInstrument"/>
-            <rdf:Description rdf:about="&MTD;StringInstrument"/>
-            <rdf:Description rdf:about="&MTD;Voice"/>
-            <rdf:Description rdf:about="&MTD;WindInstrument"/>
-        </members>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
-        <members rdf:parseType="Collection">
-            <rdf:Description rdf:about="&MTD;BassDrum"/>
-            <rdf:Description rdf:about="&MTD;SnareDrum"/>
-            <rdf:Description rdf:about="&MTD;Timpani"/>
-            <rdf:Description rdf:about="&MTD;tamTam"/>
-        </members>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
-        <members rdf:parseType="Collection">
-            <rdf:Description rdf:about="&MTD;Auxiliary"/>
-            <rdf:Description rdf:about="&MTD;Drum"/>
-            <rdf:Description rdf:about="&MTD;Keyboard"/>
-        </members>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
-        <members rdf:parseType="Collection">
-            <rdf:Description rdf:about="&MTD;Euphonium"/>
-            <rdf:Description rdf:about="&MTD;FrenchHorn"/>
-            <rdf:Description rdf:about="&MTD;Trombone"/>
-            <rdf:Description rdf:about="&MTD;Trumpet"/>
-            <rdf:Description rdf:about="&MTD;Tuba"/>
-        </members>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
-        <members rdf:parseType="Collection">
-            <rdf:Description rdf:about="&MTD;Composition"/>
-            <rdf:Description rdf:about="&MTD;Ensemble"/>
-            <rdf:Description rdf:about="&MTD;Instrument"/>
-            <rdf:Description rdf:about="&MTD;Instrumentation"/>
-            <rdf:Description rdf:about="&MTD;Period"/>
-            <rdf:Description rdf:about="&MTD;Personnel"/>
-            <rdf:Description rdf:about="&MTD;Publisher"/>
-            <rdf:Description rdf:about="&MTD;Release"/>
-        </members>
-    </rdf:Description>
-    
 
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Quintet -->
 
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Rules
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
-
-    <rdf:Description rdf:about="urn:swrl#R">
-        <rdf:type rdf:resource="&swrl;Variable"/>
-    </rdf:Description>
-    <rdf:Description rdf:about="urn:swrl#E">
-        <rdf:type rdf:resource="&swrl;Variable"/>
-    </rdf:Description>
-    <rdf:Description rdf:about="urn:swrl#C">
-        <rdf:type rdf:resource="&swrl;Variable"/>
-    </rdf:Description>
-    <rdf:Description rdf:about="urn:swrl#M">
-        <rdf:type rdf:resource="&swrl;Variable"/>
-    </rdf:Description>
-    <rdf:Description rdf:about="urn:swrl#P">
-        <rdf:type rdf:resource="&swrl;Variable"/>
-    </rdf:Description>
-    <rdf:Description rdf:about="urn:swrl#A">
-        <rdf:type rdf:resource="&swrl;Variable"/>
-    </rdf:Description>
-    <rdf:Description rdf:about="urn:swrl#B">
-        <rdf:type rdf:resource="&swrl;Variable"/>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&swrl;Imp"/>
-        <swrl:body>
-            <rdf:Description>
-                <rdf:type rdf:resource="&swrl;AtomList"/>
-                <rdf:first>
-                    <rdf:Description>
-                        <rdf:type rdf:resource="&swrl;IndividualPropertyAtom"/>
-                        <swrl:propertyPredicate rdf:resource="&MTD;hasMember"/>
-                        <swrl:argument2 rdf:resource="urn:swrl#A"/>
-                        <swrl:argument1 rdf:resource="urn:swrl#E"/>
-                    </rdf:Description>
-                </rdf:first>
-                <rdf:rest>
-                    <rdf:Description>
-                        <rdf:type rdf:resource="&swrl;AtomList"/>
-                        <rdf:rest rdf:resource="&rdf;nil"/>
-                        <rdf:first>
-                            <rdf:Description>
-                                <rdf:type rdf:resource="&swrl;IndividualPropertyAtom"/>
-                                <swrl:propertyPredicate rdf:resource="&MTD;hasMember"/>
-                                <swrl:argument2 rdf:resource="urn:swrl#B"/>
-                                <swrl:argument1 rdf:resource="urn:swrl#E"/>
-                            </rdf:Description>
-                        </rdf:first>
-                    </rdf:Description>
-                </rdf:rest>
-            </rdf:Description>
-        </swrl:body>
-        <swrl:head>
-            <rdf:Description>
-                <rdf:type rdf:resource="&swrl;AtomList"/>
-                <rdf:rest rdf:resource="&rdf;nil"/>
-                <rdf:first>
-                    <rdf:Description>
-                        <rdf:type rdf:resource="&swrl;IndividualPropertyAtom"/>
-                        <swrl:propertyPredicate rdf:resource="&MTD;coMember"/>
-                        <swrl:argument1 rdf:resource="urn:swrl#A"/>
-                        <swrl:argument2 rdf:resource="urn:swrl#B"/>
-                    </rdf:Description>
-                </rdf:first>
-            </rdf:Description>
-        </swrl:head>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&swrl;Imp"/>
-        <swrl:head>
-            <rdf:Description>
-                <rdf:type rdf:resource="&swrl;AtomList"/>
-                <rdf:rest rdf:resource="&rdf;nil"/>
-                <rdf:first>
-                    <rdf:Description>
-                        <rdf:type rdf:resource="&swrl;IndividualPropertyAtom"/>
-                        <swrl:propertyPredicate rdf:resource="&MTD;fromPeriod"/>
-                        <swrl:argument1 rdf:resource="urn:swrl#M"/>
-                        <swrl:argument2 rdf:resource="urn:swrl#P"/>
-                    </rdf:Description>
-                </rdf:first>
-            </rdf:Description>
-        </swrl:head>
-        <swrl:body>
-            <rdf:Description>
-                <rdf:type rdf:resource="&swrl;AtomList"/>
-                <rdf:first>
-                    <rdf:Description>
-                        <rdf:type rdf:resource="&swrl;IndividualPropertyAtom"/>
-                        <swrl:propertyPredicate rdf:resource="&MTD;composed"/>
-                        <swrl:argument1 rdf:resource="urn:swrl#C"/>
-                        <swrl:argument2 rdf:resource="urn:swrl#M"/>
-                    </rdf:Description>
-                </rdf:first>
-                <rdf:rest>
-                    <rdf:Description>
-                        <rdf:type rdf:resource="&swrl;AtomList"/>
-                        <rdf:rest rdf:resource="&rdf;nil"/>
-                        <rdf:first>
-                            <rdf:Description>
-                                <rdf:type rdf:resource="&swrl;IndividualPropertyAtom"/>
-                                <swrl:propertyPredicate rdf:resource="&MTD;fromPeriod"/>
-                                <swrl:argument1 rdf:resource="urn:swrl#C"/>
-                                <swrl:argument2 rdf:resource="urn:swrl#P"/>
-                            </rdf:Description>
-                        </rdf:first>
-                    </rdf:Description>
-                </rdf:rest>
-            </rdf:Description>
-        </swrl:body>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&swrl;Imp"/>
-        <swrl:head>
-            <rdf:Description>
-                <rdf:type rdf:resource="&swrl;AtomList"/>
-                <rdf:rest rdf:resource="&rdf;nil"/>
-                <rdf:first>
-                    <rdf:Description>
-                        <rdf:type rdf:resource="&swrl;IndividualPropertyAtom"/>
-                        <swrl:propertyPredicate rdf:resource="&MTD;hasPlayed"/>
-                        <swrl:argument2 rdf:resource="urn:swrl#C"/>
-                        <swrl:argument1 rdf:resource="urn:swrl#E"/>
-                    </rdf:Description>
-                </rdf:first>
-            </rdf:Description>
-        </swrl:head>
-        <swrl:body>
-            <rdf:Description>
-                <rdf:type rdf:resource="&swrl;AtomList"/>
-                <rdf:first>
-                    <rdf:Description>
-                        <rdf:type rdf:resource="&swrl;IndividualPropertyAtom"/>
-                        <swrl:propertyPredicate rdf:resource="&MTD;hasEnsemble"/>
-                        <swrl:argument2 rdf:resource="urn:swrl#E"/>
-                        <swrl:argument1 rdf:resource="urn:swrl#R"/>
-                    </rdf:Description>
-                </rdf:first>
-                <rdf:rest>
-                    <rdf:Description>
-                        <rdf:type rdf:resource="&swrl;AtomList"/>
-                        <rdf:rest rdf:resource="&rdf;nil"/>
-                        <rdf:first>
-                            <rdf:Description>
-                                <rdf:type rdf:resource="&swrl;IndividualPropertyAtom"/>
-                                <swrl:propertyPredicate rdf:resource="&MTD;recordingOf"/>
-                                <swrl:argument2 rdf:resource="urn:swrl#C"/>
-                                <swrl:argument1 rdf:resource="urn:swrl#R"/>
-                            </rdf:Description>
-                        </rdf:first>
-                    </rdf:Description>
-                </rdf:rest>
-            </rdf:Description>
-        </swrl:body>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&swrl;Imp"/>
-        <swrl:head>
-            <rdf:Description>
-                <rdf:type rdf:resource="&swrl;AtomList"/>
-                <rdf:rest rdf:resource="&rdf;nil"/>
-                <rdf:first>
-                    <rdf:Description>
-                        <rdf:type rdf:resource="&swrl;IndividualPropertyAtom"/>
-                        <swrl:propertyPredicate rdf:resource="&MTD;hasPlayed"/>
-                        <swrl:argument1 rdf:resource="urn:swrl#A"/>
-                        <swrl:argument2 rdf:resource="urn:swrl#C"/>
-                    </rdf:Description>
-                </rdf:first>
-            </rdf:Description>
-        </swrl:head>
-        <swrl:body>
-            <rdf:Description>
-                <rdf:type rdf:resource="&swrl;AtomList"/>
-                <rdf:first>
-                    <rdf:Description>
-                        <rdf:type rdf:resource="&swrl;IndividualPropertyAtom"/>
-                        <swrl:propertyPredicate rdf:resource="&MTD;hasMember"/>
-                        <swrl:argument2 rdf:resource="urn:swrl#A"/>
-                        <swrl:argument1 rdf:resource="urn:swrl#E"/>
-                    </rdf:Description>
-                </rdf:first>
-                <rdf:rest>
-                    <rdf:Description>
-                        <rdf:type rdf:resource="&swrl;AtomList"/>
-                        <rdf:rest rdf:resource="&rdf;nil"/>
-                        <rdf:first>
-                            <rdf:Description>
-                                <rdf:type rdf:resource="&swrl;IndividualPropertyAtom"/>
-                                <swrl:propertyPredicate rdf:resource="&MTD;hasPlayed"/>
-                                <swrl:argument2 rdf:resource="urn:swrl#C"/>
-                                <swrl:argument1 rdf:resource="urn:swrl#E"/>
-                            </rdf:Description>
-                        </rdf:first>
-                    </rdf:Description>
-                </rdf:rest>
-            </rdf:Description>
-        </swrl:body>
-    </rdf:Description>
+    <owl:Class rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Quintet">
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#hasMember"/>
+                <owl:onClass rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Quintet"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">5</owl:qualifiedCardinality>
+            </owl:Restriction>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Instrumentation"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Septet -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Septet">
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#hasMember"/>
+                <owl:onClass rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Performer"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">7</owl:qualifiedCardinality>
+            </owl:Restriction>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Instrumentation"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Sextet -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Sextet">
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#hasMember"/>
+                <owl:onClass rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Sextet"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">6</owl:qualifiedCardinality>
+            </owl:Restriction>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Instrumentation"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Solo -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Solo">
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#hasMember"/>
+                <owl:onClass rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Performer"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+            </owl:Restriction>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Instrumentation"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Trio -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Trio">
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#hasMember"/>
+                <owl:onClass rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Trio"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">3</owl:qualifiedCardinality>
+            </owl:Restriction>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/matt/ontologies/2014/11/untitled-ontology-69#Instrumentation"/>
+    </owl:Class>
 </rdf:RDF>
 
 
